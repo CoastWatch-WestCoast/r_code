@@ -5,7 +5,7 @@ output:
   title: sst_buoy
 ---
 
-# Matchup satellite and buoy data {#sst-buoy}
+# Matchup satellite and buoy data
 >notebook filename | 06-sstbuoy.Rmd  
 history | converted to R notebook from SSTandBuoy.R  
 
