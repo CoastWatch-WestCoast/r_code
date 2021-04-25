@@ -2,14 +2,14 @@
 output:
   html_document: default
   pdf_document: default
-  title: projections_buoy
+  title: reprojections
 ---
 
 # Reprojecting satellite and buoy data 
 >notebook filename | 07_projected_maps_buoys.Rmd  
 history | Created March 2020  
 
-This exercise demonstrates collecting satellite and in-situ buoy data as ancillary data that complement the mission of a research cruise. We will download the cruise track, satellite, and buoy data from ERDDAP and then map all of the data in an Alaska Albers projection.
+The CoastWatch program provides ocean satellite data and also non-satellite data that may be useful for ocean scientists. In exercise, we will obtain cruise track data from a research ship, in-situ buoy data, and satellite sea surface temperature data from the PolarWatch ERDDAP data server and then map all three types of the data on a map in an Alaska Albers projection.  
 
 The exercise demonstrates the following techniques:  
 
@@ -17,20 +17,20 @@ The exercise demonstrates the following techniques:
 * Accessing satellite data from ERDDAP  
 * Making projected maps of ship tracks, buoy locations and satellite data  
 
-The exercise demonstrates the following packages/functions:
+Key R packages/functions used:
 
 * **rerddap::info** - to retrieve information about a dataset from ERDDAP   
 * **rerddapXtracto::xtracto_3D** - to extract satellite data from ERDDAP  
 * **rerddap::tabledap** - to extract ship track and buoy data from ERDDAP    
 * **oce** - to plot data from ERDDAP on a projected map 
 
-This exercise accesses the following datasets:  
+Datasets used:  
 
 * NOAA Geo-polar Blended Sea Surface Temperature daily satellite data, 'nesdisGeoPolarSSTN5NRT'   
 * NDBC Buoys, 'cwwcNDBCMet'  
 * A Ship Track from the R/V Healy 'fsuResearchShipNEPP' 
 
-These datasets are all provided in ERDDAP with lat-lon coordinates. For an example of working with datasets provided in projected (ie. polar stereographic) coordinates see (insert link to projected datasets notebook)
+These datasets are all provided in ERDDAP with lat-lon coordinates. For an example of working with datasets provided in projected (ie. polar stereographic) coordinates see the "Mapping projected datasets" exercise in this tutorial.
 
 ## Install required packages and load libraries  
 
