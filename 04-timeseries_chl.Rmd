@@ -5,7 +5,7 @@ output:
   title: timeseries
 ---
 
-# Create and plot timeseries {#timeseries-chl}  
+# Create and plot timeseries  
 >notebook filename | 05-timeseries_chl.Rmd    
 history | converted to R notebook from Timeseries_CHL.R  
 
