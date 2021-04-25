@@ -4,9 +4,8 @@ output:
   pdf_document: default
   title: turtlewatch
 ---
-# TurtleWatch {#turtlewatch}
+# Define a marine habitat
 >notebook filename | 07_turtlewatch_xtracto.Rmd  
-history | converted to R notebook from R_Turtlewatch_rXtracto.R  
 
 ## Install required packages and load libraries 
 
