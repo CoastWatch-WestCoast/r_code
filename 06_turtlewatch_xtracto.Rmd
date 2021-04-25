@@ -77,9 +77,7 @@ SST$sst <- drop(SST$sst)
 plotBBox(SST, plotColor = 'temperature',maxpixels=100000)
 
 ```
-```{r blank}
 
-```
 ## Define the Thermal niche of Loggerhead Turtles  
 
 __ Set the thermal range to 17.5-18.5 degrees C, as determined by the TurtleWatch program.__  
