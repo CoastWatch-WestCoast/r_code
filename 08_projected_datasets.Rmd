@@ -5,7 +5,7 @@ output:
   title: projections
 ---
 
-# Mapping projected datasets {#Projected}
+# Mapping projected datasets
 >notebook filename | 08_projected_dataset.Rmd  
 history | created August 2019 | updated March 2020
 
