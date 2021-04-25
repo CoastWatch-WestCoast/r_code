@@ -5,7 +5,7 @@ output:
   title: xyt_matchups
 ---
 
-# Matchups to ship or animal tracks {#xyt-matchup}
+# Matchups to ship or animal tracks
 >notebook filename | 03-xyt_matchup.Rmd    
 history | converted to R notebook from xyt_matchup.R  
 
