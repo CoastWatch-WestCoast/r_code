@@ -103,7 +103,7 @@ dataInfo
 
 * Some datasets have an altitude dimension. If so, then zcood must be included in the rxtracto call. The "erdSW2018chla8day" dataset does not include an altitude dimension.  
 
-* Define the search "radius" for the gridded data. The **rxtracto** function allow you to set the size of the box used to collect data around the track points using the xlen and ylen arguments. The values for xlen and ylen are in degrees. For our example we 0.2 degrees for both arguments. Note: You can also submit vectors for xlen and ylen, as long as the arethe same length as xcoord, ycoord, and tcoord
+* Define the search "radius" for the gridded data. The **rxtracto** function allow you to set the size of the box used to collect data around the track points using the xlen and ylen arguments. The values for xlen and ylen are in degrees. For our example we 0.2 degrees for both arguments. Note: You can also submit vectors for xlen and ylen, as long as the are the same length as xcoord, ycoord, and tcoord
 
 * Run the rxtracto function to extract the data from ERDDAP.  
 
@@ -115,7 +115,7 @@ xlen <- 0.2
 ylen <- 0.2
 
 # Some datasets have an altitude dimension. If so, then zcood must be included in the rxtracto call.  
-# If the dataInfo shows an altitude dimension, uncomment "zcoord <- 0" and include tcoord=tcoord in the rxtracto call.
+# If the dataInfo shows an altitude dimension, uncomment "zcoord <- 0" and include zcoord=zcoord in the rxtracto call.
 # zcoord <- 0.
 
 swchl <- rxtracto(dataInfo, 
@@ -143,7 +143,7 @@ We will use the "plotTrack" function to plot the results.
 # Uncomment the png line and the dev.off() line to save the image
 # png(file="xyt_matchup.png")
 
-plotTrack(swchl, xcoord, ycoord, tcoord, plotColor = 'chlorophyll')
+plotTrack(swchl, xcoord, ycoord, tcoord, plotColor = 'algae')
 
 # Uncomment the png line and the dev.off() line to save the image
 #dev.off()
@@ -154,7 +154,7 @@ plotTrack(swchl, xcoord, ycoord, tcoord, plotColor = 'chlorophyll')
 To make a cumulative animation of the track:
 
 ```{r track}
-plotTrack(swchl, xcoord, ycoord, tcoord, plotColor = 'chlorophyll',
+plotTrack(swchl, xcoord, ycoord, tcoord, plotColor = 'algae',
                     animate = TRUE, cumulative = TRUE)
 ```
 
@@ -171,7 +171,7 @@ For crossing the dateline the longitudes for that animal/ship track must be in 0
 
 ```{r stn}
 lat <- seq(50,54,2)
-lon <- seq(172,190,2)
+lon <- seq(173,189,2)
 
 stax <- matrix(lon,nrow=length(lat),ncol=length(lon),byrow=TRUE)
 stay <- matrix(lat,nrow=length(lat),ncol=length(lon),byrow=FALSE)
@@ -196,10 +196,11 @@ tcoord <- rep('2019-04-15',length(xcoord))
 ```
 
 Selects the dataset and parameter for the extraction  
-In this example the dataset chosen is the monthly NOAA VIIRS chlorophyll data 
+In this example the dataset chosen is the monthly OC-CCI chlorophyll data 
 ```{r}
-dataset <- 'nesdisVHNSQchlaMonthly'
-dataInfo <- rerddap::info(dataset)
+url <- "https://coastwatch.pfeg.noaa.gov/erddap/"
+dataset <- 'pmlEsaCCI50OceanColorMonthly'
+dataInfo <- rerddap::info(dataset,url=url)
 parameter <- 'chlor_a'
 ```
 
@@ -209,17 +210,22 @@ parameter <- 'chlor_a'
 dataInfo
 ```
 
-Since this dataset has an altitude dimension, we need to supply an altitude parameter in the "rxtracto" call 
+Since this dataset does not has an altitude dimension, we do not need to supply an altitude parameter in the "rxtracto" call. In both rxtracto() and rxtracto_3D() the zcoord is not limited to be at a set location. That means for rxtracto_3D() that if the zCoord needs to be given for any reason, then it must be of length two, and for rxtracto() if the zCoord needs to be given for any reason, it must be of the same length as the other coordinates, and can also have a “zlen”“, like ”xlen" and “ylen”, that defines a bounding box within which to make the extract. The advantage of this is it allows rxtracto() to make extracts moving in (x, y, z, t) space. 
 
 ```{r zcood}
-zcoord <- 0.*xcoord
+#zcoord <- 0.*xcoord
+
+#Convert longitude values to -180/180 notation 
+
+#ifelse(xcoord > 180, -360 + xcoord, xcoord)
+
 ```
 
 Now we will make the call to match up satellite data with station locations.  
 ```{r matchup}
 chl <- rxtracto(dataInfo, 
                   parameter=parameter, 
-                  xcoord=xcoord, ycoord=ycoord, zcoord=zcoord,
+                  xcoord=xcoord, ycoord=ycoord, 
                   tcoord=tcoord, xlen=xlen, ylen=ylen)
 ```
 

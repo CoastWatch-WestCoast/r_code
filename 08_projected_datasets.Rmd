@@ -61,7 +61,7 @@ We will use the monthly science quality dataset for the Northern Hemisphere (ERD
 
 ![The dataset listing from a search for 'NSIDC CDR'](https://polarwatch.noaa.gov/sites/default/files/2020-03/R_projected_datasets_erddap_search_listing.png) 
 
-__Preview the dat__  
+__Preview the data__  
 
 From the dataset listing, click on the **graph** link to the left of the dataset title. Using the selectors on the left you can quickly preview maps of the data for your times of interest. 
 
@@ -69,7 +69,7 @@ You can generate a URL for a netCDF download of the data for the previewed image
 
 ![A preview of the NSIDC Sea Ice Concentration dataset in the PolarWatch ERDDAP](https://polarwatch.noaa.gov/sites/default/files/2020-03/R_projected_datasets_erddap_preview.png)
 
-__View Detailed Inf__  
+__View Detailed Info__  
 
 From the dataset listing, click on the **M** link to the right of the dataset title. This page will show details about the dataset including the projection. We can see that this is a polar stereographic projection with EPSG code 3411 and also the proj4 string for the dataset. In this case the projection is NSIDC Polar Stereographic North. 
 

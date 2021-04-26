@@ -66,10 +66,12 @@ For this example we will use 750 m VIIRS monthly chlorophyll dataset (ID erdVHNc
 
 **The script below:**  
 * Gathers information about the dataset (metadata) using **rerddap**  
-* Displays the information  
+* The default source ERDDAP for **rerddap** is "https://upwell.pfeg.noaa.gov/erddap". Since we are pulling the data from the ERDDAP at "http://coastwatch.pfeg.noaa.gov/erddap/", change the url to url = "http://coastwatch.pfeg.noaa.gov/erddap/"
+* Displays the dataset information  
 ```{r dataInfo}
 # Use rerddap to get dataset metadata 
-dataInfo <- rerddap::info('erdVHNchlamday')  # N. Pacific 750 m VIIRS chl
+url = "http://coastwatch.pfeg.noaa.gov/erddap/"
+dataInfo <- rerddap::info('erdVHNchlamday',url=url)  # N. Pacific 750 m VIIRS chl
 # Display the metadata 
 dataInfo
 ```
@@ -118,7 +120,7 @@ sanctchl1$time <- sanctchl1$time[2]
 * Use the plotBBox function in rerddapXtracto to quickly plot the data
 
 ```{r map}
-plotBBox(sanctchl1, plotColor = 'chlorophyll',maxpixels=100000)
+plotBBox(sanctchl1, plotColor = 'algae',maxpixels=100000)
 
 ```
 
@@ -126,7 +128,7 @@ plotBBox(sanctchl1, plotColor = 'chlorophyll',maxpixels=100000)
 
 ```{r addfunc}
 myFunc <- function(x) log(x) 
-plotBBox(sanctchl1, plotColor = 'chlorophyll',maxpixels=100000, myFunc=myFunc)
+plotBBox(sanctchl1, plotColor = 'algae',maxpixels=100000, myFunc=myFunc)
 
 
 ```

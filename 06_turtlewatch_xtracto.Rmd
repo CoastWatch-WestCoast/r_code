@@ -49,7 +49,9 @@ for (pk in list.of.packages) {
 ```{r dataInfo}
 # CHOOSE DATASET and get information about it 
 
-dataInfo <- rerddap::info('jplMURSST41mday')
+
+url = "http://coastwatch.pfeg.noaa.gov/erddap/"
+dataInfo <- rerddap::info('jplMURSST41mday',url=url)
 parameter <- 'sst'
 ```
 
@@ -74,7 +76,7 @@ SST$sst <- drop(SST$sst)
 ## Make a quick plot using plotBBox  
 ```{r qplot}
 
-plotBBox(SST, plotColor = 'temperature',maxpixels=100000)
+plotBBox(SST, plotColor = 'thermal',maxpixels=100000)
 
 ```
 
@@ -89,17 +91,17 @@ max.temp <- 18.5
 ```
 __Create another variable for habitat temperature__
 
-Set the habitat temperature to equatl NA 
+Set the habitat temperature to equal NA 
 
 ```{r makeVar}
 
 SST2 <- SST
 SST2$sst[SST2$sst >= min.temp & SST2$sst <= max.temp] <- NA
-plotBBox(SST2, plotColor = 'temperature',maxpixels=100000)
+plotBBox(SST2, plotColor = 'thermal',maxpixels=100000)
 
 ```
 
-It would be nicer to color in the turtle habitat area (the NA values) with a different color. If you want to customize the graphs its better to use `ggplot` that the `plotBBox` that comes with 
+It would be nicer to color in the turtle habitat area (the NA values) with a different color. If you want to customize graphs its better to use `ggplot` than the `plotBBox` that comes with 
 `rerrdapXtracto` package.  Here we will use `ggplot` to plot the data. But first the data is reformatted for use in `ggplot`. 
 
 Restructure the data
