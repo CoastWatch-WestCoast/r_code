@@ -6,12 +6,12 @@ output:
 ---
 # Extract data within a boundary
 
-In this exercise, you will download data from within the boundaries of the Monterey Bay National Marine Sanctuary (MBNMS) and visualize the data in a map. 
+In this exercise, you will download data from within the boundaries of the Monterey Bay National Marine Sanctuary (MBNMS) and visualize the data on a map. 
 
 The exercise demonstrates the following skills:  
 
 * Using **rerddap** to retrieve information about a dataset from ERDDAP 
-* Using the **rxtractogon** function to extract satellite data within an polygon over time  
+* Using the **rxtractogon** function from **rerdapXtracto** to extract satellite data within an polygon over time  
 * Mapping satellite data  
 
 ## Install packages and load libraries
@@ -57,31 +57,29 @@ Additional sanctuary boundaries may be obtained at   [http://sanctuaries.noaa.go
 
 ```{r latlon}
 
-# Extract the longitude and latitude data into vector variables
 xcoord <- mbnms$Longitude
 ycoord <- mbnms$Latitude
 ```
 ## Select the chloropyll dataset  
-For this example we will use 750 m VIIRS monthly chlorophyll dataset (ID erdVHNchlamday)  
+For this example we will use a 750 m VIIRS monthly chlorophyll dataset (ID erdVHNchlamday)  
 
 **The script below:**  
 * Gathers information about the dataset (metadata) using **rerddap**  
-* The default source ERDDAP for **rerddap** is "https://upwell.pfeg.noaa.gov/erddap". Since we are pulling the data from the ERDDAP at "http://coastwatch.pfeg.noaa.gov/erddap/", change the url to url = "http://coastwatch.pfeg.noaa.gov/erddap/"
+* The default source ERDDAP for **rerddap** is "https://upwell.pfeg.noaa.gov/erddap". Since we are pulling the data from a different ERDDAP at "http://coastwatch.pfeg.noaa.gov/erddap/", change the url to url = "http://coastwatch.pfeg.noaa.gov/erddap/"
 * Displays the dataset information  
 ```{r dataInfo}
 # Use rerddap to get dataset metadata 
 url = "http://coastwatch.pfeg.noaa.gov/erddap/"
 dataInfo <- rerddap::info('erdVHNchlamday',url=url)  # N. Pacific 750 m VIIRS chl
-# Display the metadata 
+# Display the metadata dataset info
 dataInfo
 ```
-## Set the options for rxtractogon  
-* Use the name of the chlorophyll parameter that was displayed above in dataInfo: **parameter <- "chla"** 
-* The metadata from dataInfo also shows you that this variable has a altitude coordinate that equals zero. Set the value of the time coordinate to zero: **zcoord <- 0.**  
-* The time variable passed to xtracogon must contain two elements, the start and endpoints of the desired time period. 
-  * This example makes use of the "last" option of ERDDAP to retrieve data from the most recent time step.  
-  * The "last' option also accepts the "-" operator. To request the time step with the second most recent data use "last-1". 
-  * In the script below the time variable (tcoord) is defined as **tcoord <- c("last-1", "last")**  
+## Set the options for the polygon data extract
+The **rxtractogon** function will need the parameter and coordinates for the extract
+* For the parameter: Use the name of the chlorophyll parameter that was displayed above in dataInfo: **parameter <- "chla"** 
+* For the coordinates: determine your selctions for x, y, z, and time.
+* z coordinate: The metadata from dataInfo shows that this variable has a altitude coordinate that equals zero. So set the value of the z coordinate to zero: **zcoord <- 0.**  
+* time coordinate: The time variable passed to xtracogon must contain two elements, the start and endpoints of the desired time period. This example uses ERDDAP's **last** option to retrieve data from the most recent time step. The **last** option also accepts the minus **-** operator. To request the time step with the second most recent data use "last-1". In the script below the time variable (tcoord) is defined as **tcoord <- c("last-1", "last")**  
 
 ```{r options}
 # set the parameter to extract
@@ -95,8 +93,7 @@ ycoord <- mbnms$Latitude
 zcoord <- 0. 
 ```
 ## Extract data and mask it using rxtractogon  
-* Set the arguments within the **rxtractogon** function using the dataset information (dataInfo), the longitude (xcoord) and latitude (ycoord) vectors from the CSV file, the time (tcoord) vector and altitude (zcoord) variable. 
-* Then run **rxtractogon** to extract data from the "erdVHNchlamday" dataset and mask out data not falling within the MBNMS boundary.  
+* Run **rxtractogon** to extract data from the "erdVHNchlamday" dataset and mask out any data outside the MBNMS boundary.  
 * List the data
 ```{r octogon}
 ## Request the data
@@ -106,9 +103,8 @@ sanctchl <- rxtractogon (dataInfo, parameter=parameter, xcoord=xcoord, ycoord=yc
 str(sanctchl)
 ```
 
-The extracted data contains two time periods of chlorophyll data within the sanctuary boundaries. 
-
-## Select just one time period, the second one.  
+## Choose Time to Plot
+The extracted data contains two time periods of chlorophyll data within the sanctuary boundaries. For this example we will show how to select just one time period from the options and map it, here we choose the second time stamp.  
 ```{r selecttime}
 
 sanctchl1 <- sanctchl
@@ -124,7 +120,8 @@ plotBBox(sanctchl1, plotColor = 'algae',maxpixels=100000)
 
 ```
 
-### Apply a function to the data
+### Apply a function to the data 
+* Here we apply a log function to the chlorophyll data and plot it again.
 
 ```{r addfunc}
 myFunc <- function(x) log(x) 
@@ -134,8 +131,4 @@ plotBBox(sanctchl1, plotColor = 'algae',maxpixels=100000, myFunc=myFunc)
 ```
 
 
-```{r, nice-fig2, echo=FALSE}
-htmltools::img(src = knitr::image_uri("images/cw_logo_notext.png"), 
-               alt = 'logo', 
-               style = 'position:absolute; top:0; right:0; padding:10px; width:100px')
-```
+
