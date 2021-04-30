@@ -324,7 +324,7 @@ text(as.Date("1997-03-01"),1.9, "OC-CCI",col="green", pos=4)
 ```
 
 
-## Make maps of the average chlorophyll for each satellite mission   
+## Make maps of the average chlorophyll for each satellite mission  
 The average chlorophyll was saved earlier as the chl avgmap variable  
 
 ```{r maps}

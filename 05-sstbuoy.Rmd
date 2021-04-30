@@ -213,7 +213,7 @@ my.col <- colorRampPalette(rev(brewer.pal(11, "RdYlBu")))(22-13)
 buoy2<-subset(dailybuoy, month(time)==8 &day(time)==5 & sst > 0)
 ```
 
-**Create the map**  
+**Create the map**   
 
 ```{r map}
 
@@ -228,10 +228,4 @@ myplot<-ggplot(data = sstFrame, aes(x = x, y = y, fill = sst)) +
   scale_color_gradientn(colours = rev(rainbow(12)),limits=c(10,25),na.value ="grey20", guide=FALSE) 
   
 myplot
-```
-
-```{r, nice-fig2, echo=FALSE}
-htmltools::img(src = knitr::image_uri("images/cw_logo_notext.png"), 
-               alt = 'logo', 
-               style = 'position:absolute; top:0; right:0; padding:10px; width:100px')
 ```

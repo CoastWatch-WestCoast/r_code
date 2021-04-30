@@ -107,7 +107,7 @@ dataInfo
 
 * Run the rxtracto function to extract the data from ERDDAP.  
 
-```{r rxtracto}
+```{r rxtracto, message=FALSE}
 
 parameter <- 'chlorophyll'
 
@@ -137,7 +137,7 @@ str(swchl)
 We will use the "plotTrack" function to plot the results.  
 * "plotTrack" is a function of the "rerddapXtracto" package designed specifically to plot the results from "rxtracto".  
 
-* The example below will use a color palette specifically designed for chlorophyll. 
+* The example below uses a color palette specifically designed for chlorophyll. 
   
 ```{r plot}
 # Uncomment the png line and the dev.off() line to save the image
@@ -145,13 +145,12 @@ We will use the "plotTrack" function to plot the results.
 
 plotTrack(swchl, xcoord, ycoord, tcoord, plotColor = 'algae')
 
-# Uncomment the png line and the dev.off() line to save the image
 #dev.off()
 ```
 
 ## Animating the track
 
-To make a cumulative animation of the track:
+Make a cumulative animation of the track. This will take a minute to run. It creates an animated gif that will display in the Rstudio viewer window once the encoding to gif is done.
 
 ```{r track}
 plotTrack(swchl, xcoord, ycoord, tcoord, plotColor = 'algae',
@@ -164,9 +163,9 @@ This match up was done using weekly (8-day) data. Try rerunning the example usin
 ## Crossing the Dateline
 In July 2019 version 0.4.1 of "reddapXtracto"" was updated allowing "rxtracto"" to work on data that crosses the dateline. In this example we will extract chlorophyll data for a grid of stations along the Aleutian Islands. 
 
-__Create an station array__   
+__Create a station array__   
 For crossing the dateline the longitudes for that animal/ship track must be in 0-360 format.  
-* Create a grid of stations from 172E to 170W (190°) and 50-54N, spced every 2°.
+* Create a grid of stations from 172E to 170W (190°) and 50-54N, spaced every 2°.
 * Then, set up vectors with these values, and then make arrays of the station longitudes and latitudes
 
 ```{r stn}
@@ -210,18 +209,16 @@ parameter <- 'chlor_a'
 dataInfo
 ```
 
-Since this dataset does not has an altitude dimension, we do not need to supply an altitude parameter in the "rxtracto" call. In both rxtracto() and rxtracto_3D() the zcoord is not limited to be at a set location. That means for rxtracto_3D() that if the zCoord needs to be given for any reason, then it must be of length two, and for rxtracto() if the zCoord needs to be given for any reason, it must be of the same length as the other coordinates, and can also have a “zlen”“, like ”xlen" and “ylen”, that defines a bounding box within which to make the extract. The advantage of this is it allows rxtracto() to make extracts moving in (x, y, z, t) space. 
 
-```{r zcood}
-#zcoord <- 0.*xcoord
+This dataset does not have an altitude dimension, so we do not need to supply an altitude parameter in the following "rxtracto" call. 
 
-#Convert longitude values to -180/180 notation 
+Note that in both rxtracto() and rxtracto_3D() the zcoord can be a range. 
+* For rxtracto_3D() if the zCoord needs to be given, it must be of length two. 
+* For rxtracto() if the zCoord needs to be given, it must be of the same length as the other coordinates, and can also have a “zlen”“, like ”xlen" and “ylen”, that defines a bounding box within which to make the extract. 
+* The advantage of this is it allows rxtracto() to make extracts moving in (x, y, z, t) space.
 
-#ifelse(xcoord > 180, -360 + xcoord, xcoord)
-
-```
-
-Now we will make the call to match up satellite data with station locations.  
+## Matchup satelite data and station locations using rxtracto()
+Now we will make the rxtracto call to match up satellite data with station locations.  
 ```{r matchup}
 chl <- rxtracto(dataInfo, 
                   parameter=parameter, 
@@ -230,9 +227,11 @@ chl <- rxtracto(dataInfo,
 ```
 
 
-Next we will map out the data. Will do this two different ways, using base graphics and using "ggplot".  "plotTrack", the routine used in the example above, is part of the "rerddapXtracto" package, and is designed to easily plot the output from "rxtracto", but currently it can not handle crossing the dateline, so we can't use it for this example. 
+Next we will map the data. We will do this two different ways, using base graphics and using "ggplot".  
 
-## Method 1: Make a map using base graphics  
+Note that "plotTrack", the routine used in the example above, is part of the "rerddapXtracto" package, and is designed to easily plot the output from "rxtracto", but currently it can not handle crossing the dateline, so we can't use it for this example. 
+
+## Map Method 1: Make a map using base graphics  
 
 First set up the color palette. 
 This will use a yellow-green palette from the Brewer package  
@@ -276,7 +275,7 @@ axis(4,mgp=c(0,.5,0),las=1)
 ```
 
 
-## Method 2: ggplot graphics.  
+## Map Method 2: ggplot graphics  
 ggplot handles colorbars much easier than base graphics! 
 
 Put station lat, long and chl values into a dataframe for passing to ggplot 
@@ -306,8 +305,4 @@ ggplot(chlsta) +
       
 
 
-```{r, nice-fig2, echo=FALSE}
-htmltools::img(src = knitr::image_uri("images/cw_logo_notext.png"), 
-               alt = 'logo', 
-               style = 'position:absolute; top:0; right:0; padding:10px; width:100px')
-```
+
