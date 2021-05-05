@@ -28,9 +28,9 @@ pkgTest <- function(x)
   }
 }
 
-list.of.packages <- c( "ncdf4", "rerddap","plotdap","rerddapXtracto","RCurl",  
+list.of.packages <- c( "ncdf4", "rerddap", "plotdap", "RCurl",  
                        "raster", "colorRamps", "maps", "mapdata",
-                       "ggplot2", "RColorBrewer")
+                       "ggplot2", "RColorBrewer", "rerddapXtracto")
 
 # create list of installed packages
 pkges = installed.packages()[,"Package"]
