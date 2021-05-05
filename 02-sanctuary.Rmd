@@ -28,9 +28,10 @@ pkgTest <- function(x)
 }
 
 # create list of required packages
-list.of.packages <- c("ncdf4", "rerddap","plotdap","rerddapXtracto", "parsedate", 
+list.of.packages <- c("ncdf4", "rerddap","plotdap", "parsedate", 
                       "sp", "ggplot2", "RColorBrewer", 
-                      "reshape2", "maps", "mapdata", "jsonlite")
+                      "reshape2", "maps", "mapdata", 
+                      "jsonlite", "rerddapXtracto")
 
 # Run install and load function
 for (pk in list.of.packages) {
