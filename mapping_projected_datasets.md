@@ -402,8 +402,9 @@ ggplot(aes(x = xgrid, y = ygrid, fill=Seaice), data = icemap2) +
        scale_fill_gradientn(colours=rev(brewer.pal(n = 5, name = "Blues")),na.value="black") 
 ```
 
-![](mapping_projected_datasets_files/figure-gfm/map4-1.png)<!-- --> \#\#
-Related Materials
+![](mapping_projected_datasets_files/figure-gfm/map4-1.png)<!-- -->
+
+## Related Materials
 
 [Projected Datasets R
 Notebook](https://dale-robinson.gitbook.io/coastwatch-satellite-course-may-2021/tutorials/r-tutorial/chapter-7-reprojecting-satellite-and-buoy-data)
