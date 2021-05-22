@@ -329,6 +329,7 @@ ggplot(aes(x = xgrid, y = ygrid, fill=Seaice), data = icemap2) +
        geom_tile() + coord_fixed(ratio = 1) + scale_y_continuous(labels = comma) + scale_x_continuous(labels = comma) +
        scale_fill_gradientn(colours=rev(brewer.pal(n = 5, name = "Blues")),na.value="black") 
 ```
+
 ## Related Materials
 
 [Projected Datasets R Notebook](https://dale-robinson.gitbook.io/coastwatch-satellite-course-may-2021/tutorials/r-tutorial/chapter-7-reprojecting-satellite-and-buoy-data) - Access and make projected plots of traditional lat-lon datasets from ERDDAP 
