@@ -13,9 +13,9 @@ ice data served in polar projected coordinates:
   - Making maps of projected data with **ggplot**
 
 This example works with data provided in ERDDAP with projected
-coordinates (polar stereographic). For an example of reprojecting data
-onto maps for datasets having latitude and longitude geographic
-coordinates, see the `Mapping projected datasets` section of the course
+coordinates (polar stereographic). For an example of reprojecting
+lat/lon data onto maps, see the `Mapping projected datasets` section of
+the course
 book.
 
 ## Install required packages and load libraries
@@ -47,8 +47,8 @@ In this example, we will use the NSIDC Sea Ice Concentration Climate
 Data Record (CDR) as our demonstration projected dataset. This dataset
 is in a polar stereographic projection, where the coordinates are given
 as meters from a central point (the north pole) instead of as latitude
-and longitude. Corresponding latitude and longitude grids enable easily
-moving between projected coordinates and latitude/longitude.
+and longitude. Corresponding latitude and longitude grids enable moving
+between projected coordinates and latitude/longitude.
 
 **Search for the NSIDC CDR sea ice datasets**
 
@@ -86,10 +86,10 @@ ERDDAP](https://polarwatch.noaa.gov/sites/default/files/2020-03/R_projected_data
 **View Detailed Info**
 
 From the dataset listing, click on the **M** link to the right of the
-dataset title. This page will show details about the dataset including
-the projection. We can see that this is a polar stereographic projection
-with EPSG code 3411 and also the proj4 string for the dataset. In this
-case the projection is NSIDC Polar Stereographic North.
+dataset title. This page shows details about the dataset including the
+projection. We see that this is a polar stereographic projection with
+EPSG code 3411 and also the proj4 string for the dataset. In this case
+the projection is NSIDC Polar Stereographic North.
 
 ![The metadata page provides important information about the dataset
 such as projection
@@ -120,8 +120,8 @@ page](https://polarwatch.noaa.gov/sites/default/files/2020-03/R_projected_datase
 We will now use R and the ERDDAP API to generate a sea ice data request.
 Subsetting data from a projected dataset requires a few more steps than
 most ERDDAP datasets. Projected datasets served in the PolarWatch ERDDAP
-are also served with a corresponding lat-lon grid. In this section, we
-will demonstrate using the lat-lon grid to make a data request for the
+have a corresponding lat-lon grid dataset. In this section, we will
+demonstrate using the lat-lon grid to make a data request for the
 projected ice data with the following steps:
 
   - Download a netCDF file of the lat/lon grid from ERDDAP
@@ -144,7 +144,7 @@ data access page as a template for data requests in R. Then we’ll
 download the data and read the netCDF file variables into R.
 
 ``` r
-# Download the lat-lon grid
+# Download the lat-lon GRID
 # Use the dataset id 'nsidcCDRice_nh_grid' and the default axis extent values
 
 url <- 'https://polarwatch.noaa.gov/erddap/griddap/'
@@ -193,12 +193,12 @@ of the URL call, go to the ERDDAP “Data Access Form” for a dataset and
 use the ‘generate the URL’ button.
 
 ``` r
-#Generate a data request URL using the indices from the grid
+#Generate a DATA request URL using the indices from the grid
 
 dataid <- 'nsidcCDRiceSQnhmday'
 varnames <- c('seaice_conc_monthly_cdr','goddard_merged_seaice_conc_monthly')
 datestring <- '[(1997-01-16T00:00:00Z):1:(2017-12-16T00:00:00Z)]'
-coordstring <- paste0('[',colrange[1],':1:',colrange[2],'][',rowrange[1],':1:',rowrange[2],']')
+coordstring <- paste0('[',colrange[1]-1,':1:',colrange[2]-1,'][',rowrange[1]-1,':1:',rowrange[2]-1,']')
 
 for (i in 1:length(varnames)) {
    if (i == 1) {
@@ -380,7 +380,7 @@ ggplot(aes(x = Longitude, y = Latitude), data = icemap.df) +
        panel.border = element_blank())
 ```
 
-    ## Warning: Removed 22908 rows containing missing values (geom_point).
+    ## Warning: Removed 22937 rows containing missing values (geom_point).
 
 ![](mapping_projected_datasets_files/figure-gfm/map3-1.png)<!-- -->
 
@@ -402,11 +402,12 @@ ggplot(aes(x = xgrid, y = ygrid, fill=Seaice), data = icemap2) +
        scale_fill_gradientn(colours=rev(brewer.pal(n = 5, name = "Blues")),na.value="black") 
 ```
 
-![](mapping_projected_datasets_files/figure-gfm/map4-1.png)<!-- --> \#\#
-Related Materials
+![](mapping_projected_datasets_files/figure-gfm/map4-1.png)<!-- -->
+
+## Related Materials
 
 [Projected Datasets R
-Notebook](https://coastwatch.pfeg.noaa.gov/projects/r/projectedOceMaps.html)
+Notebook](https://dale-robinson.gitbook.io/coastwatch-satellite-course-may-2021/tutorials/r-tutorial/chapter-7-reprojecting-satellite-and-buoy-data)
 - Access and make projected plots of traditional lat-lon datasets from
 ERDDAP
 
