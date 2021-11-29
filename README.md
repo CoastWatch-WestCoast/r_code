@@ -7,12 +7,12 @@ https://dale-robinson.gitbook.io/coastwatch-satellite-course-may-2021/tutorials/
 ## Exercise book contents  
 The Notebooks contain step-by-step code examples for extracting data from the ERDDAP data servers using the rxtracto R library. 
 * [Extract data within a boundary](extract_data_marine-sanctuary.md)  
-* Matchups satellite data to an animal tracks
-* Create timeseries from satellite data
-* Matchup satellite to buoy data
-* Define a marine habitat
-* Reprojecting satellite and buoy data
-* Mapping projected datasets
+* [Matchups satellite data to an animal tracks](matchup_satellite_track_data.md)
+* [Create timeseries from satellite data](timeseries_satellite-data.md)
+* [Matchup satellite to buoy data](matchup_satellite_buoy-data.md)
+* [Define a marine habitat](define_marine_habitat.md)
+* [Reprojecting satellite and buoy data](reprojecting_satellite_buoy_data.md)
+* [Mapping projected datasets](mapping_projected_datasets.md)
 
 ## Downloading 
 Download the enitre r_code repository. Subfolders contain images and CSV files used in the Notebook code. 
