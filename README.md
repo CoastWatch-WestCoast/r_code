@@ -1,8 +1,7 @@
 
 # R Notebooks for the CoastWatch Satellite Training Course  
 
-These files are the Notebook versions of the R exercises found in the CoastWatch Satellite Course R Tutorial  
-https://dale-robinson.gitbook.io/coastwatch-satellite-course-may-2021/tutorials/r-tutorial  
+These files are the R Notebooks for the CoastWatch Satellite Course R Tutorials 
 
 ## Exercise book contents  
 The Notebooks contain step-by-step code examples for extracting data from the ERDDAP data servers using the rxtracto R library. 
