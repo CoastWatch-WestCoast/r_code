@@ -6,6 +6,9 @@ output:
   md_document:
     variant: gfm
 ---
+>notebook filename | extract_data_marine_sanctuary.Rmd  
+history | Created March 2020
+
 # Extract data within a boundary
 
 In this exercise, you will download data from within the boundaries of the Monterey Bay National Marine Sanctuary (MBNMS) and visualize the data on a map. 

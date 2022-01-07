@@ -1,3 +1,6 @@
+> notebook filename \| extract\_data\_marine\_sanctuary.Rmd  
+> history \| Created March 2020
+
 # Extract data within a boundary
 
 In this exercise, you will download data from within the boundaries of
@@ -6,11 +9,11 @@ data on a map.
 
 The exercise demonstrates the following skills:
 
-  - Using **rerddap** to retrieve information about a dataset from
+-   Using **rerddap** to retrieve information about a dataset from
     ERDDAP
-  - Using the **rxtractogon** function from **rerdapXtracto** to extract
+-   Using the **rxtractogon** function from **rerdapXtracto** to extract
     satellite data within an polygon over time  
-  - Mapping satellite data
+-   Mapping satellite data
 
 ## Install packages and load libraries
 
@@ -62,9 +65,7 @@ Additional sanctuary boundaries may be obtained at
 
 **The script below:**
 
-  - Extracts the longitude and latitude data into vector variables
-
-<!-- end list -->
+-   Extracts the longitude and latitude data into vector variables
 
 ``` r
 xcoord <- mbnms$Longitude
@@ -93,10 +94,10 @@ dataInfo
 ```
 
     ## <ERDDAP info> erdVHNchlamday 
-    ##  Base URL: http://coastwatch.pfeg.noaa.gov/erddap/ 
+    ##  Base URL: http://coastwatch.pfeg.noaa.gov/erddap 
     ##  Dataset Type: griddap 
     ##  Dimensions (range):  
-    ##      time: (2015-03-16T00:00:00Z, 2021-04-16T00:00:00Z) 
+    ##      time: (2015-03-16T00:00:00Z, 2021-11-16T00:00:00Z) 
     ##      altitude: (0.0, 0.0) 
     ##      latitude: (-0.10875, 89.77125) 
     ##      longitude: (-180.03375, -110.00625) 
@@ -108,18 +109,18 @@ dataInfo
 
 The **rxtractogon** function will need the parameter and coordinates for
 the extract \* For the parameter: Use the name of the chlorophyll
-parameter that was displayed above in dataInfo: **parameter \<- “chla”**
-\* For the coordinates: determine your selctions for x, y, z, and time.
-\* z coordinate: The metadata from dataInfo shows that this variable has
-a altitude coordinate that equals zero. So set the value of the z
-coordinate to zero: **zcoord \<- 0.**  
+parameter that was displayed above in dataInfo: **parameter &lt;-
+“chla”** \* For the coordinates: determine your selctions for x, y, z,
+and time. \* z coordinate: The metadata from dataInfo shows that this
+variable has a altitude coordinate that equals zero. So set the value of
+the z coordinate to zero: **zcoord &lt;- 0.**  
 \* time coordinate: The time variable passed to xtracogon must contain
 two elements, the start and endpoints of the desired time period. This
 example uses ERDDAP’s **last** option to retrieve data from the most
 recent time step. The **last** option also accepts the minus **-**
 operator. To request the time step with the second most recent data use
 “last-1”. In the script below the time variable (tcoord) is defined as
-**tcoord \<- c(“last-1”, “last”)**
+**tcoord &lt;- c(“last-1”, “last”)**
 
 ``` r
 # set the parameter to extract
@@ -135,24 +136,14 @@ zcoord <- 0.
 
 ## Extract data and mask it using rxtractogon
 
-  - Run **rxtractogon** to extract data from the “erdVHNchlamday”
+-   Run **rxtractogon** to extract data from the “erdVHNchlamday”
     dataset and mask out any data outside the MBNMS boundary.  
-  - List the data
-
-<!-- end list -->
+-   List the data
 
 ``` r
 ## Request the data
 sanctchl <- rxtractogon (dataInfo, parameter=parameter, xcoord=xcoord, ycoord=ycoord,tcoord=tcoord,zcoord=zcoord)
-```
 
-    ## Registered S3 method overwritten by 'httr':
-    ##   method           from  
-    ##   print.cache_info hoardr
-
-    ## info() output passed to x; setting base url to: http://coastwatch.pfeg.noaa.gov/erddap/
-
-``` r
 ## List the returned data
 str(sanctchl)
 ```
@@ -163,7 +154,7 @@ str(sanctchl)
     ##  $ longitude  : num [1:272(1d)] -123 -123 -123 -123 -123 ...
     ##  $ latitude   : num [1:311(1d)] 35.6 35.6 35.6 35.6 35.6 ...
     ##  $ altitude   : num [1(1d)] 0
-    ##  $ time       : POSIXlt[1:2], format: "2021-03-16" "2021-04-16"
+    ##  $ time       : POSIXlt[1:2], format: "2021-10-16 12:00:00" "2021-11-16 00:00:00"
     ##  - attr(*, "class")= chr [1:2] "list" "rxtracto3D"
 
 ## Choose Time to Plot
@@ -181,10 +172,7 @@ sanctchl1$time <- sanctchl1$time[2]
 
 ### Plot the data
 
-  - Use the plotBBox function in rerddapXtracto to quickly plot the
-    data
-
-<!-- end list -->
+-   Use the plotBBox function in rerddapXtracto to quickly plot the data
 
 ``` r
 plotBBox(sanctchl1, plotColor = 'algae',maxpixels=100000)
@@ -193,14 +181,12 @@ plotBBox(sanctchl1, plotColor = 'algae',maxpixels=100000)
     ## Warning in raster::projectRaster(r, crs = crs_string): input and ouput crs are
     ## the same
 
-![](extract_data_marine-sanctuary_files/figure-gfm/map-1.png)<!-- -->
+![](extract_data_marine_sanctuary_files/figure-gfm/map-1.png)<!-- -->
 
 ### Apply a function to the data
 
-  - Here we apply a log function to the chlorophyll data and plot it
+-   Here we apply a log function to the chlorophyll data and plot it
     again.
-
-<!-- end list -->
 
 ``` r
 myFunc <- function(x) log(x) 
@@ -210,4 +196,4 @@ plotBBox(sanctchl1, plotColor = 'algae',maxpixels=100000, myFunc=myFunc)
     ## Warning in raster::projectRaster(r, crs = crs_string): input and ouput crs are
     ## the same
 
-![](extract_data_marine-sanctuary_files/figure-gfm/addfunc-1.png)<!-- -->
+![](extract_data_marine_sanctuary_files/figure-gfm/addfunc-1.png)<!-- -->

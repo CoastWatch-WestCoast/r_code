@@ -1,7 +1,8 @@
 # Matchups to ship or animal tracks
 
-> notebook filename | 03-xyt\_matchup.Rmd  
-> history | converted to R notebook from xyt\_matchup.R
+> notebook filename \| matchup\_satellite\_track\_data.Rmd  
+> history \| Created May 2021 - converted to R notebook from
+> xyt\_matchup.R
 
 This exercise you will extract satellite data around a set of points
 defined by longitude, latitude, and time coordinates like that produced
@@ -9,14 +10,14 @@ by an animal telemetry tag, and ship track, or a glider tract.
 
 The exercise demonstrates the following techniques:
 
-  - Using the **rxtracto** function to extract satellite data along a
+-   Using the **rxtracto** function to extract satellite data along a
     track  
-  - Using **rerddap** to retrieve information about a dataset from
+-   Using **rerddap** to retrieve information about a dataset from
     ERDDAP  
-  - Using **plotTrack** to plot the satellite data onto a map as well as
+-   Using **plotTrack** to plot the satellite data onto a map as well as
     to make an animation
-  - Loading data from a tab separated file  
-  - Plotting the satellite data onto a map
+-   Loading data from a tab separated file  
+-   Plotting the satellite data onto a map
 
 This data is taken from the ERDDAP server at
 <http://coastwatch.pfeg.noaa.gov/erddap/>
@@ -92,19 +93,17 @@ dataset (ID erdSW2018chla8day)
 
 **The script below:**
 
-  - Gathers information about the dataset (metadata) using **rerddap**  
-  - Displays the information
+-   Gathers information about the dataset (metadata) using **rerddap**  
+-   Displays the information
 
 **Set the following arguments for rerddap**
 
-  - Set the dataset ID: dataset \<- ‘erdSW2018chla8day’
+-   Set the dataset ID: dataset &lt;- ‘erdSW2018chla8day’
 
-  - The default source ERDDAP for **rerddap** is
+-   The default source ERDDAP for **rerddap** is
     “<https://upwell.pfeg.noaa.gov/erddap>”. Since we are pulling the
     data from the ERDDAP at “<http://coastwatch.pfeg.noaa.gov/erddap/>”,
     change the url to url = “<http://coastwatch.pfeg.noaa.gov/erddap/>”
-
-<!-- end list -->
 
 ``` r
 dataset <- 'erdSW2018chla8day'
@@ -117,7 +116,7 @@ dataInfo
 ```
 
     ## <ERDDAP info> erdSW2018chla8day 
-    ##  Base URL: https://coastwatch.pfeg.noaa.gov/erddap/ 
+    ##  Base URL: https://coastwatch.pfeg.noaa.gov/erddap 
     ##  Dataset Type: griddap 
     ##  Dimensions (range):  
     ##      time: (1997-09-02T00:00:00Z, 2010-12-15T00:00:00Z) 
@@ -129,20 +128,20 @@ dataInfo
 
 ## Extract the satellite data
 
-  - Double check dataInfo to make sure the dataset covers the time,
+-   Double check dataInfo to make sure the dataset covers the time,
     longitude, and latitude ranges in your XYT data.
 
-  - Use the name of the chlorophyll parameter that was displayed above
-    in dataInfo: **parameter \<- “chlorophyll”**
+-   Use the name of the chlorophyll parameter that was displayed above
+    in dataInfo: **parameter &lt;- “chlorophyll”**
 
-  - Use the xcoord, ycoord, and tcoord vectors you extracted from the
+-   Use the xcoord, ycoord, and tcoord vectors you extracted from the
     marlin tag file.
 
-  - Some datasets have an altitude dimension. If so, then zcood must be
+-   Some datasets have an altitude dimension. If so, then zcood must be
     included in the rxtracto call. The “erdSW2018chla8day” dataset does
     not include an altitude dimension.
 
-  - Define the search “radius” for the gridded data. The **rxtracto**
+-   Define the search “radius” for the gridded data. The **rxtracto**
     function allow you to set the size of the box used to collect data
     around the track points using the xlen and ylen arguments. The
     values for xlen and ylen are in degrees. For our example we 0.2
@@ -150,9 +149,7 @@ dataInfo
     xlen and ylen, as long as the are the same length as xcoord, ycoord,
     and tcoord
 
-  - Run the rxtracto function to extract the data from ERDDAP.
-
-<!-- end list -->
+-   Run the rxtracto function to extract the data from ERDDAP.
 
 ``` r
 parameter <- 'chlorophyll'
@@ -200,10 +197,8 @@ We will use the “plotTrack” function to plot the results.
 \* “plotTrack” is a function of the “rerddapXtracto” package designed
 specifically to plot the results from “rxtracto”.
 
-  - The example below uses a color palette specifically designed for
+-   The example below uses a color palette specifically designed for
     chlorophyll.
-
-<!-- end list -->
 
 ``` r
 # Uncomment the png line and the dev.off() line to save the image
@@ -300,7 +295,7 @@ dataInfo
 ```
 
     ## <ERDDAP info> pmlEsaCCI50OceanColorMonthly 
-    ##  Base URL: https://coastwatch.pfeg.noaa.gov/erddap/ 
+    ##  Base URL: https://coastwatch.pfeg.noaa.gov/erddap 
     ##  Dataset Type: griddap 
     ##  Dimensions (range):  
     ##      time: (1997-09-04T00:00:00Z, 2020-12-01T00:00:00Z) 
@@ -493,9 +488,6 @@ chl <- rxtracto(dataInfo,
                   tcoord=tcoord, xlen=xlen, ylen=ylen)
 ```
 
-    ## info() output passed to x; setting base url to: https://coastwatch.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://coastwatch.pfeg.noaa.gov/erddap/
-
 Next we will map the data. We will do this two different ways, using
 base graphics and using “ggplot”.
 
@@ -555,7 +547,7 @@ axis(4,mgp=c(0,.5,0),las=1)
 
 ## Map Method 2: ggplot graphics
 
-ggplot handles colorbars much easier than base graphics\!
+ggplot handles colorbars much easier than base graphics!
 
 Put station lat, long and chl values into a dataframe for passing to
 ggplot

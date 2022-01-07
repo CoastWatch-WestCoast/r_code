@@ -8,7 +8,7 @@ output:
 ---
 
 # Mapping projected datasets
->notebook filename | 08_projected_dataset.Rmd  
+>notebook filename | mapping_projected_datasets.Rmd  
 history | created August 2019 | updated March 2020
 
 This example demonstrates the following techniques for working with sea ice data served in polar projected coordinates:  
@@ -59,9 +59,7 @@ A list of datasets will load, including:
 * Science quality data from the Northern and Southern Hemispheres
 * The latitude and longitude grid for the Arctic  
 
-We will use the monthly science quality dataset for the Northern Hemisphere (ERDDAP ID = nsidcCDRiceSQnhmday) and the associated lat-lon grid dataset for the Arctic (ERDDAP ID = nsidcCDRice_nh_grid). 
-
-![The dataset listing from a search for 'NSIDC CDR'](https://polarwatch.noaa.gov/sites/default/files/2020-03/R_projected_datasets_erddap_search_listing.png) 
+We will use the monthly science quality dataset for the Northern Hemisphere (ERDDAP ID = nsidcG02202v4nhmday) and the associated lat-lon grid dataset for the Arctic (ERDDAP ID = nsidcCDRice_nh_grid). 
 
 __Preview the data__  
 
@@ -69,13 +67,14 @@ From the dataset listing, click on the **graph** link to the left of the dataset
 
 You can generate a URL for a netCDF download of the data for the previewed image by setting the file type to .nc which will display a download URL which can be used in a script.
 
-![A preview of the NSIDC Sea Ice Concentration dataset in the PolarWatch ERDDAP](https://polarwatch.noaa.gov/sites/default/files/2020-03/R_projected_datasets_erddap_preview.png)
+
+
 
 __View Detailed Info__  
 
 From the dataset listing, click on the **M** link to the right of the dataset title. This page shows details about the dataset including the projection. We see that this is a polar stereographic projection with EPSG code 3411 and also the proj4 string for the dataset. In this case the projection is NSIDC Polar Stereographic North. 
 
-![The metadata page provides important information about the dataset such as projection details.](https://polarwatch.noaa.gov/sites/default/files/2020-03/R_projected_datasets_erddap_dataset_info.png)
+
 
 __Generate a URL as a starting point for scripting__  
 
@@ -83,15 +82,15 @@ From the dataset listing, click on the **data** link to the left of the dataset 
 
 Below is an example of data request URL from the ERDDAP data access form  
 
-  >`https://polarwatch.noaa.gov/erddap/griddap/nsidcCDRiceSQnhmday.nc?`  
-  >`seaice_conc_monthly_cdr`   
-  >`[(2017-12-16T00:00:00Z):1:(2017-12-16T00:00:00Z)]`
-  >`[(5837500.0):1:(-5337500.0)][(-3837500.0):1:(3737500.0)],`  
-  >`goddard_merged_seaice_conc_monthly`  
-  >`[(2017-12-16T00:00:00Z):1:(2017-12-16T00:00:00Z)]`
-  >`[(5837500.0):1:(-5337500.0)][(-3837500.0):1:(3737500.0)]`
-  
-![Obtain a URL for a data download from the ERDDAP data access web page](https://polarwatch.noaa.gov/sites/default/files/2020-03/R_projected_datasets_erddap_data_access.png)  
+>`https://polarwatch.noaa.gov/erddap/griddap/nsidcG02202v4nhmday.nc?cdr_seaice_conc_monthly`
+>`[(2021-05-01T00:00:00Z):1:(2021-05-01T00:00:00Z)]`
+>`[(5837500.0):1:(-5337500.0)][(-3837500.0):1:(3737500.0)],`
+>`nsidc_bt_seaice_conc_monthly`
+>`[(2021-05-01T00:00:00Z):1:(2021-05-01T00:00:00Z)]`
+>`[(5837500.0):1:(-5337500.0)][(-3837500.0):1:(3737500.0)],`
+>`qa_of_cdr_seaice_conc_monthly`
+>`[(2021-05-01T00:00:00Z):1:(2021-05-01T00:00:00Z)]`
+>`[(5837500.0):1:(-5337500.0)][(-3837500.0):1:(3737500.0)]`
 
 
 ## Download the sea ice concentration data 
@@ -108,7 +107,7 @@ We will now use R and the ERDDAP API to generate a sea ice data request. Subsett
 
 __Download a netCDF file of the lat-lon grid from ERDDAP__  
 
-First, we form a request for the full lat-lon grid using the dataset id **nsidcCDRice_nh_grid** and the default axis extent values. As demostrated previously, we can use a download URL from the lat-lon grid data access page as a template for data requests in R. Then we'll download the data and read the netCDF file variables into R.
+First, we form a request for the full lat-lon grid using the dataset id **nsidcCDRice_nh_grid** and the default axis extent values. As demonstrated previously, we can use a download URL from the lat-lon grid data access page as a template for data requests in R. Then we'll download the data and read the netCDF file variables into R.
 
 ```{r grid}
 
@@ -144,14 +143,14 @@ colrange <- range(inds[,2])
 
 __Request the sea ice dataset using the selected indices from the lat/lon grid__  
 
-Request data from the monthly science quality dataset for the Northern Hemisphere (**nsidcCDRiceSQnhmday**). There are four different sea ice variables in this dataset. Downloading each of them requires adding the name of each variable and the date and coordinate constraints. Here we download two of the variables. If you need a refresher on the structure of the URL call, go to the ERDDAP "Data Access Form" for a dataset and use the 'generate the URL' button.
+Request data from the monthly science quality dataset for the Northern Hemisphere (**nsidcG02202v4nhmday**). There are four different sea ice variables in this dataset. Downloading each of them requires adding the name of each variable and the date and coordinate constraints. Here we download two of the variables. If you need a refresher on the structure of the URL call, go to the ERDDAP "Data Access Form" for a dataset and use the 'generate the URL' button.
 
 ```{r genURL}
 
 #Generate a DATA request URL using the indices from the grid
 
-dataid <- 'nsidcCDRiceSQnhmday'
-varnames <- c('seaice_conc_monthly_cdr','goddard_merged_seaice_conc_monthly')
+dataid <- 'nsidcG02202v4nhmday'
+varnames <- c('cdr_seaice_conc_monthly','nsidc_bt_seaice_conc_monthly')
 datestring <- '[(1997-01-16T00:00:00Z):1:(2017-12-16T00:00:00Z)]'
 coordstring <- paste0('[',colrange[1]-1,':1:',colrange[2]-1,'][',rowrange[1]-1,':1:',rowrange[2]-1,']')
 

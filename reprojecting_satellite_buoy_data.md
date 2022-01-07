@@ -1,44 +1,43 @@
 # Reprojecting satellite and buoy data
 
-> notebook filename | 07\_projected\_maps\_buoys.Rmd  
-> history | Created March 2020
+> notebook filename \| reprojecting\_satellite\_buoy\_data.Rmd  
+> history \| Created Mar 2020 \| Updated Jan 2022
 
 The CoastWatch program provides ocean satellite data and also
 non-satellite data that may be useful for ocean scientists. In exercise,
 we will obtain cruise track data from a research ship, in-situ buoy
 data, and satellite sea surface temperature data from the PolarWatch
-ERDDAP data server and then map all three types of the data on a map in
+ERDDAP data server and then plot all three types of the data on a map in
 an Alaska Albers projection.
 
 The exercise demonstrates the following techniques:
 
-  - Finding and accessing in-situ buoy data in ERDDAP  
-  - Accessing satellite data from ERDDAP  
-  - Making projected maps of ship tracks, buoy locations and satellite
+-   Finding and accessing in-situ buoy data in ERDDAP  
+-   Accessing satellite data from ERDDAP  
+-   Making projected maps of ship tracks, buoy locations and satellite
     data
 
 Key R packages/functions used:
 
-  - **rerddap::info** - to retrieve information about a dataset from
+-   **rerddap::info** - to retrieve information about a dataset from
     ERDDAP  
-  - **rerddapXtracto::xtracto\_3D** - to extract satellite data from
+-   **rerddapXtracto::xtracto\_3D** - to extract satellite data from
     ERDDAP  
-  - **rerddap::tabledap** - to extract ship track and buoy data from
+-   **rerddap::tabledap** - to extract ship track and buoy data from
     ERDDAP  
-  - **oce** - to plot data from ERDDAP on a projected map
+-   **oce** - to plot data from ERDDAP on a projected map
 
 Datasets used:
 
-  - NOAA Geo-polar Blended Sea Surface Temperature daily satellite data,
+-   NOAA Geo-polar Blended Sea Surface Temperature daily satellite data,
     ‘nesdisGeoPolarSSTN5NRT’  
-  - NDBC Buoys, ‘cwwcNDBCMet’  
-  - A Ship Track from the R/V Healy ‘fsuResearchShipNEPP’
+-   NDBC Buoys, ‘cwwcNDBCMet’  
+-   A Ship Track from the R/V Healy ‘fsuResearchShipNEPP’
 
 These datasets are all provided in ERDDAP with lat-lon coordinates. For
 an example of working with datasets provided in projected (ie. polar
 stereographic) coordinates see the “Mapping projected datasets” exercise
-in this
-tutorial.
+in this tutorial.
 
 ## Install required packages and load libraries
 
@@ -78,7 +77,7 @@ shipDataInfo <- rerddap::info('fsuResearchShipNEPP')
 ship.df <- tabledap(shipDataInfo, fields = c('latitude',  'longitude', 'time','airTemperature'), 'time>=2011-06-21T00:00:00Z', 'time<=2011-06-29T00:00:00Z')
 ```
 
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
+    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap
 
 **Visualize the ship track**
 
@@ -214,25 +213,24 @@ mapPoints(longitude = nightbuoy.df$longitude,
 
 ## Add Satellite SST Data
 
-  - Request metadata for the Geo-Polar Blended SST dataset using the
+-   Request metadata for the Geo-Polar Blended SST dataset using the
     **rerddap::info** function.
-  - Use the returned info about dimensions and variable names to form a
+-   Use the returned info about dimensions and variable names to form a
     data request.
-  - The satellite dataset id is **nesdisGeoPolarSSTN5NRT**
-
-<!-- end list -->
+-   The satellite dataset id is **nesdisGeoPolarSSTN5NRT**
 
 ``` r
 # Request and view info about satellite dataset
-satdataInfo <- rerddap::info('nesdisGeoPolarSSTN5SQNRT')
+WCN_ERDDAP <- "https://coastwatch.pfeg.noaa.gov/erddap/"
+satdataInfo <- rerddap::info('nesdisGeoPolarSSTN5SQNRT', url = WCN_ERDDAP)
 satdataInfo
 ```
 
     ## <ERDDAP info> nesdisGeoPolarSSTN5SQNRT 
-    ##  Base URL: https://upwell.pfeg.noaa.gov/erddap/ 
+    ##  Base URL: https://coastwatch.pfeg.noaa.gov/erddap 
     ##  Dataset Type: griddap 
     ##  Dimensions (range):  
-    ##      time: (2002-09-01T12:00:00Z, 2021-05-17T12:00:00Z) 
+    ##      time: (2002-09-01T12:00:00Z, 2022-01-03T12:00:00Z) 
     ##      latitude: (-89.975, 89.975) 
     ##      longitude: (-179.975, 179.975) 
     ##  Variables:  
@@ -256,11 +254,7 @@ map.
 parameter='analysed_sst'
 
 satMap <- rxtracto_3D(satdataInfo, xcoord=xlim, ycoord=ylim, parameter=parameter, tcoord=c('2011-06-24','2011-06-24'))
-```
 
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-
-``` r
 satMap$sat_sst <- drop(satMap$sat_sst)
 ```
 

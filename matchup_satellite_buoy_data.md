@@ -1,24 +1,24 @@
 # Matchup satellite and buoy data
 
-> notebook filename | 06-sstbuoy.Rmd  
-> history | converted to R notebook from SSTandBuoy.R
+> notebook filename \| matchup\_satellite\_buoy\_data.Rmd  
+> history \| Created May 2021 - converted to R notebook from original
+> file SSTandBuoy.R
 
 In this exercise you will extract buoy data from ERDDAP tabular data and
 then extract satellite data that is coincident with the buoy data.
 
 The exercise demonstrates the following techniques:
 
-  - Use the **tabledap** function to extract tabular data from ERDDAP  
-  - Using **xtracto** to extract satellite data coincident with the buoy
+-   Use the **tabledap** function to extract tabular data from ERDDAP  
+-   Using **xtracto** to extract satellite data coincident with the buoy
     data  
-  - Using **rxtracto\_3D** to extract satellite data for a rectangular
+-   Using **rxtracto\_3D** to extract satellite data for a rectangular
     area  
-  - Using **rerddap** to retrieve information about a dataset from
+-   Using **rerddap** to retrieve information about a dataset from
     ERDDAP  
-  - Producing xy scatter plots  
-  - Generating linear regressions  
-  - Producing satellite maps and overlaying buoy
-data
+-   Producing xy scatter plots  
+-   Generating linear regressions  
+-   Producing satellite maps and overlaying buoy data
 
 ## Install required packages and load libraries
 
@@ -59,14 +59,12 @@ for (pk in list.of.packages) {
 
 **Extract data using the tabledap function**
 
-  - For every day in August 2018  
-  - In the region bounded by 30.86 to 41.75 north latitude and -128 to
+-   For every day in August 2018  
+-   In the region bounded by 30.86 to 41.75 north latitude and -128 to
     -116 east longitude  
-  - request the station, latitude, longitude, time, and water
+-   request the station, latitude, longitude, time, and water
     temperature parameters  
-  - put the data into a data frame
-
-<!-- end list -->
+-   put the data into a data frame
 
 ``` r
 buoy <- tabledap(
@@ -95,12 +93,10 @@ n.sta <- length(unique.sta)
 
 **Select buoy data closest in time to satellite data**
 
-  - Buoy data is hourly, but there is only one satellite value per
+-   Buoy data is hourly, but there is only one satellite value per
     day.  
-  - So subset buoy data to that taken as 22h00 GMT (2pm local + 8),
+-   So subset buoy data to that taken as 22h00 GMT (2pm local + 8),
     which corresponds to when the satellite passes overhead.
-
-<!-- end list -->
 
 ``` r
 dailybuoy <- subset(buoy.df,hour(time)==22)
@@ -112,10 +108,8 @@ dailybuoy <- subset(buoy.df,hour(time)==22)
 erdVHsstaWS3day)**  
 **The script below:**
 
-  - Gathers metadata by using the **rerddap::info** function
-  - Display the information
-
-<!-- end list -->
+-   Gathers metadata by using the **rerddap::info** function
+-   Display the information
 
 ``` r
 # Select VIIRS dataset and get information about the dataset 
@@ -125,10 +119,10 @@ dataInfo
 ```
 
     ## <ERDDAP info> erdVHsstaWS3day 
-    ##  Base URL: https://upwell.pfeg.noaa.gov/erddap/ 
+    ##  Base URL: https://upwell.pfeg.noaa.gov/erddap 
     ##  Dataset Type: griddap 
     ##  Dimensions (range):  
-    ##      time: (2014-11-02T12:00:00Z, 2021-05-17T12:00:00Z) 
+    ##      time: (2014-11-02T12:00:00Z, 2022-01-03T12:00:00Z) 
     ##      altitude: (0.0, 0.0) 
     ##      latitude: (30.860437023511412, 41.753893186176605) 
     ##      longitude: (-128.2508393601582, -114.7491606398418) 
@@ -139,14 +133,12 @@ dataInfo
 
 **Extact the matchup data using rxtracto**
 
-  - Use the variable name in dataInfo for the parameter argument
-  - Use the longitude, latitude, and time coordinates from dailybuoy to
+-   Use the variable name in dataInfo for the parameter argument
+-   Use the longitude, latitude, and time coordinates from dailybuoy to
     set xcoord, ycoord, and tcoord
-  - This dataset has a altitude dimension, so add a vector of zeros, one
+-   This dataset has a altitude dimension, so add a vector of zeros, one
     for each matchup
-  - Run rxtracto
-
-<!-- end list -->
+-   Run rxtracto
 
 ``` r
 parameter <- 'sst'
@@ -160,30 +152,13 @@ extract <- rxtracto(dataInfo, parameter=parameter,
                     tcoord=tcoord,
                     xcoord=xcoord,ycoord=ycoord,zcoord=zcoord,
                     xlen=.01,ylen=.01)
-```
-
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-
-``` r
+                     
 dailybuoy$viirs<-extract$`mean sst`
 ```
 
 **Get subset of data where a satellite value was found**
 
-  - Not all matchup will yield data, for example due to cloud cover.
-
-<!-- end list -->
+-   Not all matchup will yield data, for example due to cloud cover.
 
 ``` r
 # Get subset of data where there is a satellite value 
@@ -195,10 +170,8 @@ ndata<-length(goodbuoy$sta)
 
 ## Compare results for satellite and buoy
 
-  - Plot the VIIRS satellite verses the buoy data to visualize how well
+-   Plot the VIIRS satellite verses the buoy data to visualize how well
     the two datasets track each other.
-
-<!-- end list -->
 
 ``` r
 # Set up map title 
@@ -217,7 +190,7 @@ p + geom_point() +
   labs(title=main) + theme(plot.title = element_text(size=25, face="bold", vjust=2)) 
 ```
 
-![](matchup_satellite_buoy-data_files/figure-gfm/xyplot-1.png)<!-- -->
+![](matchup_satellite_buoy_data_files/figure-gfm/xyplot-1.png)<!-- -->
 
 Run a linear regression of VIIRS satellite verses the buoy data. \* The
 R squared in close to 1 (0.9807) \* The slope is near 1 (0.950711)
@@ -258,11 +231,7 @@ xlim<-c(-128,-115)
 # Extract the monthly satellite data
 SST <- rxtracto_3D(dataInfo,xcoord=xlim,ycoord=ylim,parameter=parameter, 
                    tcoord=c('2018-08-06','2018-08-06'),zcoord=zcoord)
-```
 
-    ## info() output passed to x; setting base url to: https://upwell.pfeg.noaa.gov/erddap/
-
-``` r
 SST$sst <- drop(SST$sst)
 ```
 
@@ -300,4 +269,7 @@ myplot<-ggplot(data = sstFrame, aes(x = x, y = y, fill = sst)) +
 myplot
 ```
 
-![](matchup_satellite_buoy-data_files/figure-gfm/map-1.png)<!-- -->
+    ## Warning: It is deprecated to specify `guide = FALSE` to remove a guide. Please
+    ## use `guide = "none"` instead.
+
+![](matchup_satellite_buoy_data_files/figure-gfm/map-1.png)<!-- -->

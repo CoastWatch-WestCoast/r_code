@@ -1,37 +1,34 @@
----
-title: Create timeseries from satellite data
-author: NOAA CoastWatch
-date: May 20, 2021
-output:
-  md_document:
-    variant: gfm
----
+# Create and plot timeseries
 
-# Create and plot timeseries  
->notebook filename | 05-timeseries_chl.Rmd    
-history | converted to R notebook from Timeseries_CHL.R  
+> notebook filename \| timeseries\_satellite\_data.Rmd  
+> history \| Created May 2021: converted to R notebook from
+> Timeseries\_CHL.R
 
-This example extracts a time-series of monthly satellite chlorophyll data for the period of 1997-present from four different monthly satellite datasets:  
+This example extracts a time-series of monthly satellite chlorophyll
+data for the period of 1997-present from four different monthly
+satellite datasets:
 
-* SeaWiFS, 1997-2012 (ID = erdSWchlamday)  
-* MODIS, 2002-present (ID = erdMH1chlamday)  
-* VIIRS, 2012-present  (ID = nesdisVHNSQchlaMonthly)  
-* OC-CCI, 1997-2017, a blended product that merges multiple satellite missions  (ID = pmlEsaCCI31OceanColorMonthly)  
+-   SeaWiFS, 1997-2012 (ID = erdSWchlamday)  
+-   MODIS, 2002-present (ID = erdMH1chlamday)  
+-   VIIRS, 2012-present (ID = nesdisVHNSQchlaMonthly)  
+-   OC-CCI, 1997-2017, a blended product that merges multiple satellite
+    missions (ID = pmlEsaCCI50OceanColorMonthly)
 
-The exercise demonstrates the following techniques:  
+The exercise demonstrates the following techniques:
 
-* Using **xtracto_3D** to extract data from a rectangular area of the ocean over time
-* Using **rerddap** to retrieve information about a dataset from ERDDAP
-* Comparing results from different sensors  
-* Averaging data temporally and spatially 
-* Producing scatter plots  
-* Producing line plots  
-* Drawing maps with satellite data using **ggplot**  
+-   Using **xtracto\_3D** to extract data from a rectangular area of the
+    ocean over time
+-   Using **rerddap** to retrieve information about a dataset from
+    ERDDAP
+-   Comparing results from different sensors  
+-   Averaging data temporally and spatially
+-   Producing scatter plots  
+-   Producing line plots  
+-   Drawing maps with satellite data using **ggplot**
 
-## Install required packages and load libraries  
+## Install required packages and load libraries
 
-```{r install, message=FALSE, warning=FALSE}
-
+``` r
 # Function to check if pkgs are installed, install missing pkgs, and load
 pkgTest <- function(x)
 {
@@ -60,37 +57,46 @@ for (pk in list.of.packages) {
 
 # install missing packages
 #if(length(new.packages)) install.packages(new.packages)
-
 ```
-## Define the area boundaries  
-Next, extract data for an area in the Southern California Bight, between -120 to -115 degrees east longitude and 31 to 34 degrees north latitude.  
 
-* Set the longitude range: xcoord<-c(-120, -115)  
-* Set the latitude range: xcoord<-c(31,34)  
+## Define the area boundaries
 
-```{r bounds}
+Next, extract data for an area in the Southern California Bight, between
+-120 to -115 degrees east longitude and 31 to 34 degrees north latitude.
+
+-   Set the longitude range: xcoord&lt;-c(-120, -115)  
+-   Set the latitude range: xcoord&lt;-c(31,34)
+
+``` r
 xcoord<-c(-120, -115)
 ycoord<-c(31,34)
 
 ##Format Box Coordinates for cosmetics, to make a nice map title
 ttext<-paste(paste(abs(xcoord), collapse="-"),"W, ", paste(ycoord, collapse="-"),"N")
 ```
-## Extract satellite data with rxtracto_3D    
-For each dataset, you will extract satellite data for the entire length of the available timeseries.  
 
-* Dates must be defined separately for each dataset. **rxtracto_3D** will crash if dates are entered that are not part of the timeseries.  
-* The beginning (earliest) date to use in timeseries is obtained from the information returned in dataInfo.  
-* To get the end (most recent) date to use in the timeseries, use the `last` option for time.   
+## Extract satellite data with rxtracto\_3D
+
+For each dataset, you will extract satellite data for the entire length
+of the available timeseries.
+
+-   Dates must be defined separately for each dataset. **rxtracto\_3D**
+    will crash if dates are entered that are not part of the
+    timeseries.  
+-   The beginning (earliest) date to use in timeseries is obtained from
+    the information returned in dataInfo.  
+-   To get the end (most recent) date to use in the timeseries, use the
+    `last` option for time.
 
 ### Get the SeaWiFS data
 
-To begin, examine the metadata for the SeaWiFS monthly dataset (ID = erdSWchlamday). 
-The script block below:
+To begin, examine the metadata for the SeaWiFS monthly dataset (ID =
+erdSWchlamday). The script block below:
 
-* Gathers information about the dataset (metadata) using **rerddap**  
-* Displays the information 
+-   Gathers information about the dataset (metadata) using **rerddap**  
+-   Displays the information
 
-```{r dataInfo1}
+``` r
 # Use rerddap to get information about the dataset
 url="https://coastwatch.pfeg.noaa.gov/erddap/"
 dataInfo <- rerddap::info('erdSWchlamday', url=url)
@@ -98,16 +104,37 @@ dataInfo <- rerddap::info('erdSWchlamday', url=url)
 # Display the dataset metadata
 dataInfo
 ```
-**Set the arguments for the data extraction**  
 
-* **rxtracto3D** will need you to provide the parameter and coordinates for the extraction
-* For the parameter, use the name of the chlorophyll variable that was displayed above in dataInfo: **parameter <- "chlorophyll".** You can set this manually, but in this example, we will set **pamameter** directly from the variable returned from the rerddap::info() function (dataInfo).  
-* The metadata from dataInfo also shows you that this variable has an altitude coordinate that equals zero. Set the value of the z coordinate to zero: **zcoord <- 0.**  
-* Obtain the beginning and ending dates from the variable returned from the rerddap::info() function (dataInfo).  
-* Use the "last" option for the ending date instead of the actual date in the dataInfo
+    ## <ERDDAP info> erdSWchlamday 
+    ##  Base URL: https://coastwatch.pfeg.noaa.gov/erddap 
+    ##  Dataset Type: griddap 
+    ##  Dimensions (range):  
+    ##      time: (1997-09-16T00:00:00Z, 2010-12-16T12:00:00Z) 
+    ##      altitude: (0.0, 0.0) 
+    ##      latitude: (-90.0, 90.0) 
+    ##      longitude: (0.0, 360.0) 
+    ##  Variables:  
+    ##      chlorophyll: 
+    ##          Units: mg m-3
 
-```{r prep_seawifs_rxtracto3d}
+**Set the arguments for the data extraction**
 
+-   **rxtracto3D** will need you to provide the parameter and
+    coordinates for the extraction
+-   For the parameter, use the name of the chlorophyll variable that was
+    displayed above in dataInfo: **parameter &lt;- “chlorophyll”.** You
+    can set this manually, but in this example, we will set
+    **pamameter** directly from the variable returned from the
+    rerddap::info() function (dataInfo).  
+-   The metadata from dataInfo also shows you that this variable has an
+    altitude coordinate that equals zero. Set the value of the z
+    coordinate to zero: **zcoord &lt;- 0.**  
+-   Obtain the beginning and ending dates from the variable returned
+    from the rerddap::info() function (dataInfo).  
+-   Use the “last” option for the ending date instead of the actual date
+    in the dataInfo
+
+``` r
 # Extract the parameter name from the metadata in dataInfo
 parameter <- dataInfo$variable$variable_name
 
@@ -123,10 +150,9 @@ tt <- global[ global$attribute_name %in% c('time_coverage_end','time_coverage_st
 tcoord <- c(tt[2],"last")
 ```
 
-** Run the SeaWiFS data extraction with rxtracto_3D:
+\*\* Run the SeaWiFS data extraction with rxtracto\_3D:
 
-```{r run_seawifs_rxtracto3d}
-
+``` r
 # Extract the timeseries data using rxtracto_3D
 chlSeaWiFS<-rxtracto_3D(dataInfo,
                         parameter=parameter,
@@ -139,22 +165,36 @@ chlSeaWiFS<-rxtracto_3D(dataInfo,
 chlSeaWiFS$chlorophyll <- drop(chlSeaWiFS$chlorophyll)
 ```
 
-### Get the MODIS data  
-* First get the datadet metadata with "rerddap::info" 
-* Use the MODIS dataset ID "erdMH1chlamday"
+### Get the MODIS data
 
-```{r dataInfo_modis}
+-   First get the datadet metadata with “rerddap::info”
+-   Use the MODIS dataset ID “erdMH1chlamday”
+
+``` r
 # Use rerddap to get information about the dataset
 # if you encouter an error reading the nc file clear the rerrdap cache: 
 # rerddap::cache_delete_all(force = TRUE)
 dataInfo <- rerddap::info('erdMH1chlamday')
 dataInfo
 ```
-**Set the arguments for MODIS extraction**  
 
-Since this dataset does not have an altitude dimension, remove zcoord as an argument in rxtracto_3D  
-```{r prep_extract_modis}
+    ## <ERDDAP info> erdMH1chlamday 
+    ##  Base URL: https://upwell.pfeg.noaa.gov/erddap 
+    ##  Dataset Type: griddap 
+    ##  Dimensions (range):  
+    ##      time: (2003-01-16T00:00:00Z, 2021-11-16T00:00:00Z) 
+    ##      latitude: (-89.97917, 89.97916) 
+    ##      longitude: (-179.9792, 179.9792) 
+    ##  Variables:  
+    ##      chlorophyll: 
+    ##          Units: mg m-3
 
+**Set the arguments for MODIS extraction**
+
+Since this dataset does not have an altitude dimension, remove zcoord as
+an argument in rxtracto\_3D
+
+``` r
 # Extract the parameter name from the metadata in dataInfo
 parameter <- dataInfo$variable$variable_name
 
@@ -166,9 +206,10 @@ global <- dataInfo$alldata$NC_GLOBAL
 tt <- global[ global$attribute_name %in% c('time_coverage_end','time_coverage_start'), "value", ]
 tcoord <- c(tt[2],"last")
 ```
+
 **Run MODIS extraction**
 
-```{r run_extract_modis}
+``` r
 #Run rxtracto_3D
 chlMODIS<-rxtracto_3D(dataInfo,
                       parameter=parameter,
@@ -176,12 +217,15 @@ chlMODIS<-rxtracto_3D(dataInfo,
                       xcoord=xcoord,
                       ycoord=ycoord)
 ```
+
 ### Get VIIRS data
 
-First get the dataset metadata with "rerddap::info" by changeing the dataset ID to "nesdisVHNSQchlaMonthly"
+First get the dataset metadata with “rerddap::info” by changeing the
+dataset ID to “nesdisVHNSQchlaMonthly”
 
 Repeat the same commands but change the name of the dataset.
-```{r dataInfo3}
+
+``` r
 # Use rerddap to get information about the dataset
 # if you encouter an error reading the nc file clear the rerrdap cache: 
 # rerddap::cache_delete_all(force = TRUE)
@@ -191,10 +235,25 @@ Repeat the same commands but change the name of the dataset.
 dataInfo <- rerddap::info('erdVHNchlamday')  # alternate dataset to use
 dataInfo
 ```
-**Set the arguments for VIIRS Extraction**  
 
-* This dataset has an altitude dimension. Include zcoord as an argument in the rxtracto_3D function 
-```{r prep_viirs_extract}
+    ## <ERDDAP info> erdVHNchlamday 
+    ##  Base URL: https://upwell.pfeg.noaa.gov/erddap 
+    ##  Dataset Type: griddap 
+    ##  Dimensions (range):  
+    ##      time: (2015-03-16T00:00:00Z, 2021-11-16T00:00:00Z) 
+    ##      altitude: (0.0, 0.0) 
+    ##      latitude: (-0.10875, 89.77125) 
+    ##      longitude: (-180.03375, -110.00625) 
+    ##  Variables:  
+    ##      chla: 
+    ##          Units: mg m^-3
+
+**Set the arguments for VIIRS Extraction**
+
+-   This dataset has an altitude dimension. Include zcoord as an
+    argument in the rxtracto\_3D function
+
+``` r
 zcoord <- 0.
 
 ## This extracts the parameter name from the metadata in dataInfo
@@ -211,7 +270,8 @@ tcoord <- c(tt[2],"last")
 ```
 
 **Run VIIRS extraction**
-```{r run_viirs_extract}
+
+``` r
 # Run rxtracto_3D
 chlVIIRS<-rxtracto_3D(dataInfo,
                       parameter=parameter,
@@ -224,14 +284,16 @@ chlVIIRS<-rxtracto_3D(dataInfo,
 chlVIIRS$chla <- drop(chlVIIRS$chla)
 ```
 
-## Create timeseries of mean montly data  
+## Create timeseries of mean montly data
 
-**The script below:**  
+**The script below:**
 
-* spatially averages data for each time step within the area boundaries for each dataset.  
-* temporally averages data for data in each timeseries onto a map, for each dataset. 
+-   spatially averages data for each time step within the area
+    boundaries for each dataset.  
+-   temporally averages data for data in each timeseries onto a map, for
+    each dataset.
 
-```{r means}
+``` r
 ## Spatially average all the data within the box for each dataset.
 ## The c(3) indicates the dimension to keep - in this case time 
 chlSeaWiFS$avg <- apply(chlSeaWiFS$chlorophyll, c(3),function(x) mean(x,na.rm=TRUE))
@@ -244,10 +306,12 @@ chlSeaWiFS$avgmap <- apply(chlSeaWiFS$chlorophyll,c(1,2),function(x) mean(x,na.r
 chlMODIS$avgmap <- apply(chlMODIS$chlorophyll,c(1,2),function(x) mean(x,na.rm=TRUE))
 chlVIIRS$avgmap <- apply(chlVIIRS$chla,c(1,2),function(x) mean(x,na.rm=TRUE))
 ```
-## Plot time series  
-* Displays a timeseries plot of all three datasets
 
-```{r plot}
+## Plot time series
+
+-   Displays a timeseries plot of all three datasets
+
+``` r
 ## To print out a file uncomment the png command and the dev.off command
 ##png(file="CHL_timeseries.png", width=10,height=7.5,units="in",res=500)
 plot(as.Date(chlSeaWiFS$time), chlSeaWiFS$avg, 
@@ -263,23 +327,37 @@ points(as.Date(chlVIIRS$time), chlVIIRS$avg, type='b', bg="black", pch=21,cex=.7
 text(as.Date("1997-03-01"),2.8, "SeaWiFS",col="blue", pos=4)
 text(as.Date("1997-03-01"),2.5, "MODIS",col="red", pos=4)
 text(as.Date("1997-03-01"),2.2, "VIIRS",col="black", pos=4)
+```
+
+![](timeseries_satellite_data_files/figure-gfm/plot-1.png)<!-- -->
+
+``` r
 #dev.off() # This closes the png file if its been written to 
 ```
-## Now add ESA OCCI Data  
-If you needed a single timeseries from 1997 to present, you would have to use the plot above to devise some method to reconcile the difference in values where two datasets overlap. Alternatively, you could use the ESA OC-CCI (ocean color climate change initiative) dataset, which blends data from many satellite missions into a single dataset. Next we will add the ESA OC-CCI dataset to the plot above to see how it compares with data from the individual satellite missions. 
 
-* Change the dataset ID to "pmlEsaCCI31OceanColorMonthly" in the rerddap::info function.
-* There are over 60 variables in this dataset, so the dataInfo is not displayed (feel free to examine the dataInfo variable on your own).  
-* This dataset has no altitude dimension. Do not include zcoord as an argument in the rxtracto_3D function.   
+## Now add ESA OCCI Data
 
+If you needed a single timeseries from 1997 to present, you would have
+to use the plot above to devise some method to reconcile the difference
+in values where two datasets overlap. Alternatively, you could use the
+ESA OC-CCI (ocean color climate change initiative) dataset, which blends
+data from many satellite missions into a single dataset. Next we will
+add the ESA OC-CCI dataset to the plot above to see how it compares with
+data from the individual satellite missions.
 
-```{r occci}
+-   Change the dataset ID to “pmlEsaCCI50OceanColorMonthly” in the
+    rerddap::info function.
+-   There are over 60 variables in this dataset, so the dataInfo is not
+    displayed (feel free to examine the dataInfo variable on your
+    own).  
+-   This dataset has no altitude dimension. Do not include zcoord as an
+    argument in the rxtracto\_3D function.
 
-
+``` r
 # Reading in three datasets, which  have different datset attributes (ie parameter 
 # name and the presence or absence of an altitude field) is cumbersome.  ESA makes 
 # a "mission-less" product, which seemlessly integrates data from all these sensors 
-# into one.  So lets redo this exercise iusing this dateset instead and compare the results.  
+# into one.  So lets redo this exercise using this dateset instead and compare the results.  
 
 dataInfo <- rerddap::info('pmlEsaCCI50OceanColorMonthly', url=url)
                        
@@ -304,9 +382,10 @@ chlOCCCI$avg <- apply(chlOCCCI$chlor_a, c(3),function(x) mean(x,na.rm=TRUE))
 # Now temporally average the data into one map 
 chlOCCCI$avgmap <- apply(chlOCCCI$chlor_a,c(1,2),function(x) mean(x,na.rm=TRUE))
 ```
-**Add ESA OCCI data to the plot**  
 
-```{r plotall, message=FALSE, warning=FALSE}
+**Add ESA OCCI data to the plot**
+
+``` r
 ## Plot SeaWIFS
 plot(as.Date(chlSeaWiFS$time), chlSeaWiFS$avg, 
      type='b', bg="blue", pch=21, xlab="", cex=.7,
@@ -323,14 +402,19 @@ text(as.Date("1997-03-01"),2.8, "SeaWiFS",col="blue", pos=4)
 text(as.Date("1997-03-01"),2.5, "MODIS",col="red", pos=4)
 text(as.Date("1997-03-01"),2.2, "VIIRS",col="black", pos=4)
 text(as.Date("1997-03-01"),1.9, "OC-CCI",col="green", pos=4)
+```
+
+![](timeseries_satellite_data_files/figure-gfm/plotall-1.png)<!-- -->
+
+``` r
 #dev.off() # This closes the png file if its been written to 
 ```
 
+## Make maps of the average chlorophyll for each satellite mission
 
-## Make maps of the average chlorophyll for each satellite mission   
-The average chlorophyll was saved earlier as the chl avgmap variable  
+The average chlorophyll was saved earlier as the chl avgmap variable
 
-```{r maps}
+``` r
 coast <- map_data("worldHires", ylim = ycoord, xlim = xcoord)
 
 # Put arrays into format for ggplot
@@ -373,6 +457,10 @@ for(i in 1:4) {
 #png(file="CHL_averagemaps.png")
 library(grid)
 grid.arrange(plot_list[[1]],plot_list[[2]],plot_list[[3]],plot_list[[4]], nrow = 2)
-#dev.off()
+```
 
+![](timeseries_satellite_data_files/figure-gfm/maps-1.png)<!-- -->
+
+``` r
+#dev.off()
 ```
