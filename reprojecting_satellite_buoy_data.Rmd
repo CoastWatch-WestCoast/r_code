@@ -8,10 +8,10 @@ output:
 ---
 
 # Reprojecting satellite and buoy data 
->notebook filename | 07_projected_maps_buoys.Rmd  
-history | Created March 2020  
+>notebook filename | reprojecting_satellite_buoy_data.Rmd  
+history | Created Mar 2020 | Updated Jan 2022
 
-The CoastWatch program provides ocean satellite data and also non-satellite data that may be useful for ocean scientists. In exercise, we will obtain cruise track data from a research ship, in-situ buoy data, and satellite sea surface temperature data from the PolarWatch ERDDAP data server and then map all three types of the data on a map in an Alaska Albers projection.  
+The CoastWatch program provides ocean satellite data and also non-satellite data that may be useful for ocean scientists. In exercise, we will obtain cruise track data from a research ship, in-situ buoy data, and satellite sea surface temperature data from the PolarWatch ERDDAP data server and then plot all three types of the data on a map in an Alaska Albers projection.  
 
 The exercise demonstrates the following techniques:  
 
@@ -196,7 +196,8 @@ mapPoints(longitude = nightbuoy.df$longitude,
 ```{r satdataInfo}
 
 # Request and view info about satellite dataset
-satdataInfo <- rerddap::info('nesdisGeoPolarSSTN5SQNRT')
+WCN_ERDDAP <- "https://coastwatch.pfeg.noaa.gov/erddap/"
+satdataInfo <- rerddap::info('nesdisGeoPolarSSTN5SQNRT', url = WCN_ERDDAP)
 satdataInfo
 ```
 

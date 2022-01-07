@@ -8,8 +8,8 @@ output:
 ---
 
 # Matchups to ship or animal tracks
->notebook filename | 03-xyt_matchup.Rmd    
-history | converted to R notebook from xyt_matchup.R  
+>notebook filename | matchup_satellite_track_data.Rmd    
+history | Created May 2021 - converted to R notebook from xyt_matchup.R  
 
 This exercise you will extract satellite data around a set of points defined by longitude, latitude, and time coordinates like that produced by an animal telemetry tag, and ship track, or a glider tract. 
 

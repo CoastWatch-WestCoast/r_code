@@ -1,6 +1,6 @@
 # Define a marine habitat
 
-> notebook filename | 07\_turtlewatch\_xtracto.Rmd
+> notebook filename \| define\_marine\_habitat.Rmd
 
 The TurleWatch project investigated the thermal habitat of loggerhead
 sea turtles in the Pacific Ocean north of the Hawaiian Islands. Research
@@ -14,8 +14,7 @@ turtles using satellite sea surface temperature. The exercise
 demonstrates the following techniques:  
 \* Using xtracto\_3D to extract data from a rectangular area  
 \* Masking a data array  
-\* Plotting maps using
-ggplot
+\* Plotting maps using ggplot
 
 ## Install required packages and load libraries
 
@@ -44,11 +43,9 @@ for (pk in list.of.packages) {
 
 ## Select the Satellite Data
 
-  - Use the MUR SST dataset (ID jplMURSST41mday)  
-  - Gather information about the dataset (metadata) using **rerddap**  
-  - Displays the information
-
-<!-- end list -->
+-   Use the MUR SST dataset (ID jplMURSST41mday)  
+-   Gather information about the dataset (metadata) using **rerddap**  
+-   Displays the information
 
 ``` r
 # CHOOSE DATASET and get information about it 
@@ -61,13 +58,11 @@ parameter <- 'sst'
 
 ## Get Satellite Data
 
-  - Select an area off the coast of California: longitude range of -130
+-   Select an area off the coast of California: longitude range of -130
     to -115 east and latitude range of 25 to 40 north  
-  - Set the time range to days withing one month:
+-   Set the time range to days withing one month:
     tcoord=c(‘2018-06-06’,‘2018-06-08’)). The values do have to be
     different.
-
-<!-- end list -->
 
 ``` r
 # latitude and longitude of the vertices
@@ -78,15 +73,7 @@ xlim<-c(-130,-115)
 # Extract the data
 SST <- rxtracto_3D(dataInfo,xcoord=xlim,ycoord=ylim,parameter=parameter, 
                    tcoord=c('2018-06-06','2018-06-08'))
-```
 
-    ## Registered S3 method overwritten by 'httr':
-    ##   method           from  
-    ##   print.cache_info hoardr
-
-    ## info() output passed to x; setting base url to: http://coastwatch.pfeg.noaa.gov/erddap/
-
-``` r
 # Drop command needed to reduce SST from a 3D variable to a 2D  one  
 SST$sst <- drop(SST$sst) 
 ```
