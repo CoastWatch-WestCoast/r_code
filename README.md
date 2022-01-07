@@ -5,10 +5,10 @@ These files are the R Notebooks for the CoastWatch Satellite Course R Tutorials
 
 ## Exercise book contents  
 The Notebooks contain step-by-step code examples for extracting data from the ERDDAP data servers using the rxtracto R library. 
-* [Extract data within a boundary](extract_data_marine-sanctuary.md)  
+* [Extract data within a boundary](extract_data_marine_sanctuary.md)  
 * [Matchups satellite data to an animal tracks](matchup_satellite_track_data.md)
-* [Create timeseries from satellite data](timeseries_satellite-data.md)
-* [Matchup satellite to buoy data](matchup_satellite_buoy-data.md)
+* [Create timeseries from satellite data](timeseries_satellite_data.md)
+* [Matchup satellite to buoy data](matchup_satellite_buoy_data.md)
 * [Define a marine habitat](define_marine_habitat.md)
 * [Reprojecting satellite and buoy data](reprojecting_satellite_buoy_data.md)
 * [Mapping projected datasets](mapping_projected_datasets.md)
