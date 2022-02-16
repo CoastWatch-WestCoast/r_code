@@ -1,7 +1,8 @@
-# Mapping projected datasets
+# Accessing projected datasets
 
-> notebook filename \| mapping\_projected\_datasets.Rmd  
-> history \| created August 2019 \| updated March 2020
+> notebook filename \| accessing\_projected\_datasets.Rmd  
+> history \| created August 2019 \| updated: March 2020, Jan 2022, Feb
+> 2022
 
 This example demonstrates the following techniques for working with sea
 ice data served in polar projected coordinates:
@@ -75,6 +76,16 @@ maps of the data for your times of interest.
 You can generate a URL for a netCDF download of the data for the
 previewed image by setting the file type to .nc which will display a
 download URL which can be used in a script.
+
+The following graphic shows the default graph for this dataset as viewed
+on the ERDDAP make-a-graph page.
+
+``` r
+url <- "https://polarwatch.noaa.gov/erddap/griddap/nsidcG02202v4nhmday.png?cdr_seaice_conc_monthly%5Blast%5D%5B(5837500.0):(-5337500.0)%5D%5B(-3837500.0):(3737500.0)%5D&.draw=surface&.vars=xgrid%7Cygrid%7Ccdr_seaice_conc_monthly&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff"
+knitr::include_graphics(url)
+```
+
+![](https://polarwatch.noaa.gov/erddap/griddap/nsidcG02202v4nhmday.png?cdr_seaice_conc_monthly%5Blast%5D%5B(5837500.0):(-5337500.0)%5D%5B(-3837500.0):(3737500.0)%5D&.draw=surface&.vars=xgrid%7Cygrid%7Ccdr_seaice_conc_monthly&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff)<!-- -->
 
 **View Detailed Info**
 
@@ -292,7 +303,7 @@ ggplot(aes(x = Longitude, y = Latitude), data = icemap.df) +
        scale_color_gradientn(colours=rev(brewer.pal(n = 5, name = "Blues")),na.value="black") 
 ```
 
-![](mapping_projected_datasets_files/figure-gfm/map1-1.png)<!-- -->
+![](accessing_projected_datasets_files/figure-gfm/map1-1.png)<!-- -->
 
 **Map with a polar view**
 
@@ -341,7 +352,7 @@ theme(panel.background = element_blank(),
       axis.ticks=element_blank())  
 ```
 
-![](mapping_projected_datasets_files/figure-gfm/map2-1.png)<!-- -->
+![](accessing_projected_datasets_files/figure-gfm/map2-1.png)<!-- -->
 
 **Map with a clipped polar view**
 
@@ -367,7 +378,7 @@ ggplot(aes(x = Longitude, y = Latitude), data = icemap.df) +
 
     ## Warning: Removed 22937 rows containing missing values (geom_point).
 
-![](mapping_projected_datasets_files/figure-gfm/map3-1.png)<!-- -->
+![](accessing_projected_datasets_files/figure-gfm/map3-1.png)<!-- -->
 
 **Map using projected coordinates**
 
@@ -387,15 +398,15 @@ ggplot(aes(x = xgrid, y = ygrid, fill=Seaice), data = icemap2) +
        scale_fill_gradientn(colours=rev(brewer.pal(n = 5, name = "Blues")),na.value="black") 
 ```
 
-![](mapping_projected_datasets_files/figure-gfm/map4-1.png)<!-- -->
+![](accessing_projected_datasets_files/figure-gfm/map4-1.png)<!-- -->
 
 ## Related Materials
 
-[Projected Datasets R
-Notebook](https://dale-robinson.gitbook.io/coastwatch-satellite-course-may-2021/tutorials/r-tutorial/chapter-7-reprojecting-satellite-and-buoy-data)
-- Access and make projected plots of traditional lat-lon datasets from
-ERDDAP
+[R Tutorial: Making Projected Plots with Lat-Lon
+Datasets](https://github.com/CoastWatch-WestCoast/r_code/blob/master/reprojecting_satellite_buoy_data.md)
+- An R notebook tutorial that demonstrates how to access traditional
+lat-lon datasets from ERDDAP and make plots of the data in projections
+that are common to the polar regions and Alaska.
 
-[ERDDAP Training Course
-Book](https://coastwatch.pfeg.noaa.gov/projects/erddap/) - Using the
-features of ERDDAP
+[ERDDAP Tutorial](https://github.com/CoastWatch-WestCoast/ERDDAP-basics)
+- An introduction to using ERDDAP for viewing and downloading data.

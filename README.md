@@ -23,7 +23,7 @@ In this exercise you will plot the thermal boundary of loggerhead sea turtles us
 * [Reprojecting satellite and buoy data](reprojecting_satellite_buoy_data.md)  
 In exercise, we will obtain cruise track data from a research ship, in-situ buoy data, and satellite sea surface temperature data from the PolarWatch ERDDAP data server and then plot all three types of the data on a map in an Alaska Albers projection.  
 
-* [Mapping projected datasets](mapping_projected_datasets.md)  
+* [Accessing projected datasets](accessing_projected_datasets.md)  
 This excercise demonstrates techniques for working with sea ice data served in polar stereographic map projection.
 
 

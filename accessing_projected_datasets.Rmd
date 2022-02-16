@@ -1,5 +1,5 @@
 ---
-title: Mapping projected datasets
+title: Accessing projected datasets
 author: NOAA CoastWatch
 date: May 20, 2021
 output:
@@ -7,9 +7,9 @@ output:
     variant: gfm
 ---
 
-# Mapping projected datasets
->notebook filename | mapping_projected_datasets.Rmd  
-history | created August 2019 | updated March 2020
+# Accessing projected datasets
+>notebook filename | accessing_projected_datasets.Rmd  
+history | created August 2019 | updated: March 2020, Jan 2022, Feb 2022
 
 This example demonstrates the following techniques for working with sea ice data served in polar projected coordinates:  
 
@@ -67,7 +67,12 @@ From the dataset listing, click on the **graph** link to the left of the dataset
 
 You can generate a URL for a netCDF download of the data for the previewed image by setting the file type to .nc which will display a download URL which can be used in a script.
 
+The following graphic shows the default graph for this dataset as viewed on the ERDDAP make-a-graph page.
 
+```{r}
+url <- "https://polarwatch.noaa.gov/erddap/griddap/nsidcG02202v4nhmday.png?cdr_seaice_conc_monthly%5Blast%5D%5B(5837500.0):(-5337500.0)%5D%5B(-3837500.0):(3737500.0)%5D&.draw=surface&.vars=xgrid%7Cygrid%7Ccdr_seaice_conc_monthly&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff"
+knitr::include_graphics(url)
+```
 
 
 __View Detailed Info__  
@@ -331,6 +336,6 @@ ggplot(aes(x = xgrid, y = ygrid, fill=Seaice), data = icemap2) +
 
 ## Related Materials
 
-[Projected Datasets R Notebook](https://dale-robinson.gitbook.io/coastwatch-satellite-course-may-2021/tutorials/r-tutorial/chapter-7-reprojecting-satellite-and-buoy-data) - Access and make projected plots of traditional lat-lon datasets from ERDDAP 
+[R Tutorial: Making Projected Plots with Lat-Lon Datasets](https://github.com/CoastWatch-WestCoast/r_code/blob/master/reprojecting_satellite_buoy_data.md) - An R notebook tutorial that demonstrates how to access traditional lat-lon datasets from ERDDAP and make plots of the data in projections that are common to the polar regions and Alaska.
 
-[ERDDAP Training Course Book](https://coastwatch.pfeg.noaa.gov/projects/erddap/) - Using the features of ERDDAP
+[ERDDAP Tutorial](https://github.com/CoastWatch-WestCoast/ERDDAP-basics) - An introduction to using ERDDAP for viewing and downloading data.
