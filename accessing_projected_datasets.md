@@ -13,10 +13,8 @@ ice data served in polar projected coordinates:
     dataset
 -   Making maps of projected data with **ggplot**
 
-This example works with data provided in ERDDAP with projected
-coordinates (polar stereographic). For an example of reprojecting
-lat/lon data onto maps, see the `Mapping projected datasets` section of
-the course book.
+You can run this code in R studio using the corresponding Rmd file.
+[View Rmd file](https://github.com/CoastWatch-WestCoast/r_code/blob/master/accessing_projected_datasets.Rmd)
 
 ## Install required packages and load libraries
 
@@ -405,8 +403,8 @@ ggplot(aes(x = xgrid, y = ygrid, fill=Seaice), data = icemap2) +
 [R Tutorial: Making Projected Plots with Lat-Lon
 Datasets](https://github.com/CoastWatch-WestCoast/r_code/blob/master/reprojecting_satellite_buoy_data.md)
 - An R notebook tutorial that demonstrates how to access traditional
-lat-lon datasets from ERDDAP and make plots of the data in projections
-that are common to the polar regions and Alaska.
+lat-lon datasets from ERDDAP and make plots in a projection
+commonly used for Alaska
 
 [ERDDAP Tutorial](https://github.com/CoastWatch-WestCoast/ERDDAP-basics)
-- An introduction to using ERDDAP for viewing and downloading data.
+- An introduction to using ERDDAP for viewing and downloading data
