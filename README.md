@@ -10,7 +10,7 @@ example_topic_1/
                example_topic_1.Rmd
                example_topic_1.md
 ```
-### File stypes
+### File types
 **.Rmd** : R-markdown files are R files and you can download them and open in RStudio software to view, edit and run the code snippets.
 
 **.md**  : Markdown files are not R files and **will not** work in RStudio.  Markdown files have R codes and output and they can be opened on Github for preview.  
