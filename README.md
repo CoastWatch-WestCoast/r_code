@@ -1,9 +1,23 @@
+# R Code Repository
 
-# R Notebooks for the CoastWatch Satellite Training Course  
+This repository includes R codes in Rmd (R-markdown), md (markdown) format to demonstrate access and usage of geospatial data (satellite, buoy data).
 
-These files are the R Notebooks for the CoastWatch Satellite Course R Tutorials 
+## Repository Structure
+It is in a directory structure organized by topics.  Topics include various tasks when using satellite data products including download, accessing, manipulating and/or projecting data on maps.
+```
+example_topic_1/
+               data/
+               example_topic_1.Rmd
+               example_topic_1.md
+```
+### File stypes
+**.Rmd** : R-markdown files are R files and you can download them and open in RStudio software to view, edit and run the code snippets.
 
-## Exercise book contents  
+**.md**  : Markdown files are not R files and **will not** work in RStudio.  Markdown files have R codes and output and they can be opened on Github for preview.  
+
+## Content Description
+Each R files contain step-by-step code examples for various tasks required to work with satellite or non-satellite geospatial data including getting data from ERDDAP data servers to using data ..
+
 The Notebooks contain step-by-step code examples for extracting data from the ERDDAP data servers using the rxtracto R library.  
 * [Extract data within a boundary](extract_data_marine_sanctuary.md)   
 In this exercise, you will download data from within the boundaries of the Monterey Bay National Marine Sanctuary (MBNMS) and visualize the data in a map.  
