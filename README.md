@@ -1,6 +1,6 @@
 # R Code Repository
 
-This repository includes R codes in Rmd (R-markdown), md (markdown) files and all other supporting files to demonstrate access and usage of geospatial data (satellite, non satellite data).
+This repository includes R codes in Rmd (R-markdown) and md (markdown) file format, and all other supporting files to demonstrate access and usage of geospatial data (satellite, non satellite data).
 
 ## Repository Structure
 Files are organized in a folder structure by topics.  Each topic is a folder and all associated files are included in the folder.  
