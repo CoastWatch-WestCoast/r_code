@@ -1,24 +1,28 @@
 # R Code Repository
 
-This repository includes R codes in Rmd (R-markdown), md (markdown) format to demonstrate access and usage of geospatial data (satellite, buoy data).
+This repository includes R codes in Rmd (R-markdown), md (markdown) files and all other supporting files to demonstrate access and usage of geospatial data (satellite, non satellite data).
 
 ## Repository Structure
-It is in a directory structure organized by topics.  Topics include various tasks when using satellite data products including download, accessing, manipulating and/or projecting data on maps.
+Files are organized in a folder structure by topics.  Each topic is a folder and all associated files are included in the folder.  
+
+For example, a topic titled, "accessing-satellite-data" folder includes R codes in Rmd (R markdown file) and all associated files.  
+
 ```
-example_topic_1/
+accessing-satellite-data/
                data/
-               example_topic_1.Rmd
-               example_topic_1.md
+               basemaps/
+               images/
+               accessing-satellite-data.Rmd
+               accessing-satellite-data.md
 ```
 ### File types
-**.Rmd** : R-markdown files are R files and you can download them and open in RStudio software to view, edit and run the code snippets.
+**.Rmd** : R-markdown files are R files and you can download to open in RStudio to view, edit and run the codes.
 
-**.md**  : Markdown files are not R files and **will not** work in RStudio.  Markdown files have R codes and output and they can be opened on Github for preview.  
+**.md**  : Markdown files are not R files and **will not** work in RStudio.  The main objective of md files are for users to preview the R codes and the outputs on Github. 
 
 ## Content Description
-Each R files contain step-by-step code examples for various tasks required to work with satellite or non-satellite geospatial data including getting data from ERDDAP data servers to using data ..
+Each R file contains step-by-step code examples for various tasks required to work with satellite or non-satellite geospatial data including getting data from ERDDAP data servers to using data.
 
-The Notebooks contain step-by-step code examples for extracting data from the ERDDAP data servers using the rxtracto R library.  
 * [Extract data within a boundary](extract_data_marine_sanctuary.md)   
 In this exercise, you will download data from within the boundaries of the Monterey Bay National Marine Sanctuary (MBNMS) and visualize the data in a map.  
 
